@@ -1,0 +1,66 @@
+\documentclass[12pt,oneside]{report}
+\usepackage{setspace}\doublespacing
+\usepackage{physics}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{titlesec}
+\usepackage{microtype}
+\graphicspath{{images/}}
+\input{spp.dat}
+\pretolerance=5000
+\tolerance=9000
+\emergencystretch=0pt
+\righthyphenmin=4
+\lefthyphenmin=4
+\renewcommand*\thesection{\arabic{chapter}.\arabic{section}}
+
+\begin{document}
+\pagenumbering{roman}
+
+\title{
+{\includegraphics[scale=0.15]{updlogo.png}} \\
+{\normalsize UNIVERSITY OF THE PHILIPPINES} \\ \bigskip
+{\bf COMPRESSIVE SENSING: APPLICATIONS FROM 1-D TO N-D}
+}
+
+\author{
+{By} \\ \bigskip
+{\bf KENNETH V. DOMINGO} \\ \bigskip
+{\rm A Baccalaureate Thesis Submitted to the} \\
+{\rm National Institute of Physics} \\
+{\rm College of Science} \\
+{\rm University of the Philippines} \\
+{\rm Diliman, Quezon City} \\ \bigskip
+{\rm In Partial Fulfillment of the Requirements} \\
+{\rm For the Degree of} \\
+{\bf B.S. Applied Physics (Instrumentation)}
+}
+\date{\normalsize June 2020}
+\maketitle
+\thispagestyle{titlestyle}
+
+\chapter*{Acknowledgments}
+
+\chapter*{Abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\label{chap:intro}
+\input{chapter01}
+
+\chapter{Preliminaries}
+\label{chap:theory}
+\input{chapter02}
+
+\bibliographystyle{spp-bst}
+\bibliography{library,thesis}
+
+\end{document}
