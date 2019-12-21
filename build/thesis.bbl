@@ -1,0 +1,339 @@
+\begin{thebibliography}{27}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname bibnamefont\endcsname\relax
+  \def\bibnamefont#1{#1}\fi
+\expandafter\ifx\csname bibfnamefont\endcsname\relax
+  \def\bibfnamefont#1{#1}\fi
+\expandafter\ifx\csname citenamefont\endcsname\relax
+  \def\citenamefont#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{}\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[1]{\href{http://arxiv.org/abs/#1}{arXiv:#1}}
+
+\bibitem[{\citenamefont{Mathew and Premanand}(2016)}]{Mathew2016}
+\bibinfo{author}{\bibfnamefont{M.~R.} \bibnamefont{Mathew}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Premanand}},
+  \bibinfo{title}{{Sub-Nyquist Sampling of Acoustic Signals Based on Chaotic
+  Compressed Sensing}},
+  \href{http://dx.doi.org/10.1016/j.protcy.2016.05.193}{\emph{\bibinfo{journal}{Procedia
+  Technol.}}
+  }\href{http://dx.doi.org/10.1016/j.protcy.2016.05.193}{\textbf{\bibinfo{volume}{24}},
+  \bibinfo{pages}{941}} (\bibinfo{year}{2016}), ISSN \bibinfo{issn}{22120173}.
+
+\bibitem[{\citenamefont{Andr{\'{a}}{\v{s}}
+  et~al.}(2018)\citenamefont{Andr{\'{a}}{\v{s}}, Dolinsk{\'{y}}, Michaeli, and
+  {\v{S}}aliga}}]{Andras2018}
+\bibinfo{author}{\bibfnamefont{I.}~\bibnamefont{Andr{\'{a}}{\v{s}}}},
+  \bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Dolinsk{\'{y}}}},
+  \bibinfo{author}{\bibfnamefont{L.}~\bibnamefont{Michaeli}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{{\v{S}}aliga}},
+  \bibinfo{title}{{A time domain reconstruction method of randomly sampled
+  frequency sparse signal}},
+  \href{http://dx.doi.org/10.1016/j.measurement.2018.05.065}{\emph{\bibinfo{journal}{Meas.
+  J. Int. Meas. Confed.}}
+  }\href{http://dx.doi.org/10.1016/j.measurement.2018.05.065}{\textbf{\bibinfo{volume}{127}},
+  \bibinfo{pages}{68}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{02632241}.
+
+\bibitem[{\citenamefont{Low et~al.}(2013)\citenamefont{Low, Pham, and
+  Venkatesh}}]{Low2013}
+\bibinfo{author}{\bibfnamefont{S.~Y.} \bibnamefont{Low}},
+  \bibinfo{author}{\bibfnamefont{D.~S.} \bibnamefont{Pham}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Venkatesh}},
+  \bibinfo{title}{{Compressive speech enhancement}},
+  \href{http://dx.doi.org/10.1016/j.specom.2013.03.003}{\emph{\bibinfo{journal}{Speech
+  Commun.}}
+  }\href{http://dx.doi.org/10.1016/j.specom.2013.03.003}{\textbf{\bibinfo{volume}{55}},
+  \bibinfo{pages}{757}} (\bibinfo{year}{2013}), ISSN \bibinfo{issn}{01676393}.
+
+\bibitem[{\citenamefont{Low}(2018)}]{Low2018}
+\bibinfo{author}{\bibfnamefont{S.~Y.} \bibnamefont{Low}},
+  \bibinfo{title}{{Compressive speech enhancement in the modulation domain}},
+  \href{http://dx.doi.org/10.1016/j.specom.2018.08.003}{\emph{\bibinfo{journal}{Speech
+  Commun.}}
+  }\href{http://dx.doi.org/10.1016/j.specom.2018.08.003}{\textbf{\bibinfo{volume}{102}},
+  \bibinfo{pages}{87}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{01676393}.
+
+\bibitem[{\citenamefont{Abrol et~al.}(2015)\citenamefont{Abrol, Sharma, and
+  Sao}}]{Abrol2015}
+\bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Abrol}},
+  \bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Sharma}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{A.~K.} \bibnamefont{Sao}},
+  \bibinfo{title}{{Voiced/nonvoiced detection in compressively sensed speech
+  signals}},
+  \href{http://dx.doi.org/10.1016/j.specom.2015.06.001}{\emph{\bibinfo{journal}{Speech
+  Commun.}}
+  }\href{http://dx.doi.org/10.1016/j.specom.2015.06.001}{\textbf{\bibinfo{volume}{72}},
+  \bibinfo{pages}{194}} (\bibinfo{year}{2015}), ISSN \bibinfo{issn}{01676393}.
+
+\bibitem[{\citenamefont{Mo et~al.}(2013)\citenamefont{Mo, Zhang, Zheng, and
+  Zhou}}]{Mo2013}
+\bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Mo}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Zheng}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Zhou}}, \bibinfo{title}{{An
+  image compression-encryption algorithm based on 2-D compressive sensing}},
+  \href{http://dx.doi.org/10.12733/jcis8608}{\emph{\bibinfo{journal}{J. Comput.
+  Inf. Syst.}}
+  }\href{http://dx.doi.org/10.12733/jcis8608}{\textbf{\bibinfo{volume}{9}},
+  \bibinfo{pages}{10057}} (\bibinfo{year}{2013}), ISSN
+  \bibinfo{issn}{15539105}.
+
+\bibitem[{\citenamefont{Zhou et~al.}(2016)\citenamefont{Zhou, Pan, Cheng, and
+  Zhou}}]{Zhou2016}
+\bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Zhou}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Pan}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Cheng}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Zhou}},
+  \bibinfo{title}{{Image compression-encryption scheme based on hyper-chaotic
+  system and 2D compressive sensing}},
+  \href{http://dx.doi.org/10.1016/j.optlastec.2016.02.018}{\emph{\bibinfo{journal}{Opt.
+  Laser Technol.}}
+  }\href{http://dx.doi.org/10.1016/j.optlastec.2016.02.018}{\textbf{\bibinfo{volume}{82}},
+  \bibinfo{pages}{121}} (\bibinfo{year}{2016}), ISSN \bibinfo{issn}{00303992}.
+
+\bibitem[{\citenamefont{Romero et~al.}(2016)\citenamefont{Romero, Tapang, and
+  Saloma}}]{Romero2016}
+\bibinfo{author}{\bibfnamefont{R.~A.} \bibnamefont{Romero}},
+  \bibinfo{author}{\bibfnamefont{G.~A.} \bibnamefont{Tapang}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{C.~A.}
+  \bibnamefont{Saloma}}, in \emph{\bibinfo{booktitle}{Proceedings of the
+  Samahang Pisika ng Pilipinas Physics Conference}}
+  (\bibinfo{address}{University of the Philippines Visayas, Iloilo City,
+  Philippines}, \bibinfo{year}{2016}), vol.~\bibinfo{volume}{34},
+  \bibinfo{pages}{\href{https://paperview.spp--online.org/proceedings/article/view/376}{SPP--2016--PA--14}}.
+
+\bibitem[{\citenamefont{Liu et~al.}(2014)\citenamefont{Liu, Gu, Zhang, and
+  Li}}]{Liu2014}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Liu}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Gu}},
+  \bibinfo{author}{\bibfnamefont{Q.}~\bibnamefont{Zhang}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Li}},
+  \bibinfo{title}{{Principal component analysis algorithm in video compressed
+  sensing}},
+  \href{http://dx.doi.org/10.1016/j.ijleo.2013.07.120}{\emph{\bibinfo{journal}{Optik
+  (Stuttg).}}
+  }\href{http://dx.doi.org/10.1016/j.ijleo.2013.07.120}{\textbf{\bibinfo{volume}{125}},
+  \bibinfo{pages}{1149}} (\bibinfo{year}{2014}), ISSN \bibinfo{issn}{00304026}.
+
+\bibitem[{\citenamefont{Chen et~al.}(2014)\citenamefont{Chen, Su, Wang, and
+  Lan}}]{Chen2014}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Chen}},
+  \bibinfo{author}{\bibfnamefont{K.~X.} \bibnamefont{Su}},
+  \bibinfo{author}{\bibfnamefont{W.~X.} \bibnamefont{Wang}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{C.~D.} \bibnamefont{Lan}},
+  \bibinfo{title}{{Residual distributed compressive video sensing based on
+  double side information}},
+  \href{http://dx.doi.org/10.3724/SP.J.1004.2014.02316}{\emph{\bibinfo{journal}{Zidonghua
+  Xuebao/Acta Autom. Sin.}}
+  }\href{http://dx.doi.org/10.3724/SP.J.1004.2014.02316}{\textbf{\bibinfo{volume}{40}},
+  \bibinfo{pages}{2316}} (\bibinfo{year}{2014}), ISSN \bibinfo{issn}{02544156}.
+
+\bibitem[{\citenamefont{Liu et~al.}(2013)\citenamefont{Liu, Song, Qin, and
+  Qiu}}]{Liu2013}
+\bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Liu}},
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Song}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Qin}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Qiu}},
+  \bibinfo{title}{{Dictionary learning based reconstruction for distributed
+  compressed video sensing}},
+  \href{http://dx.doi.org/10.1016/j.jvcir.2013.08.007}{\emph{\bibinfo{journal}{J.
+  Vis. Commun. Image Represent.}}
+  }\href{http://dx.doi.org/10.1016/j.jvcir.2013.08.007}{\textbf{\bibinfo{volume}{24}},
+  \bibinfo{pages}{1232}} (\bibinfo{year}{2013}), ISSN \bibinfo{issn}{10473203}.
+
+\bibitem[{\citenamefont{Sharma et~al.}(2018)\citenamefont{Sharma, Abrol,
+  Nivedita, and Sao}}]{Sharma2018}
+\bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Sharma}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Abrol}},
+  \bibinfo{author}{\bibnamefont{Nivedita}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{A.~K.} \bibnamefont{Sao}},
+  \bibinfo{title}{{Reducing footprint of unit selection based text-to-speech
+  system using compressed sensing and sparse representation}},
+  \href{http://dx.doi.org/10.1016/j.csl.2018.05.003}{\emph{\bibinfo{journal}{Comput.
+  Speech Lang.}}
+  }\href{http://dx.doi.org/10.1016/j.csl.2018.05.003}{\textbf{\bibinfo{volume}{52}},
+  \bibinfo{pages}{191}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{10958363}.
+
+\bibitem[{\citenamefont{Eslahi et~al.}(2016)\citenamefont{Eslahi, Aghagolzadeh,
+  and Andargoli}}]{Eslahi2016}
+\bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Eslahi}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Aghagolzadeh}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{S.~M.~H.}
+  \bibnamefont{Andargoli}}, \bibinfo{title}{{Image/video compressive sensing
+  recovery using joint adaptive sparsity measure}},
+  \href{http://dx.doi.org/10.1016/j.neucom.2016.03.013}{\emph{\bibinfo{journal}{Neurocomputing}}
+  }\href{http://dx.doi.org/10.1016/j.neucom.2016.03.013}{\textbf{\bibinfo{volume}{200}},
+  \bibinfo{pages}{88}} (\bibinfo{year}{2016}), ISSN \bibinfo{issn}{18728286}.
+
+\bibitem[{\citenamefont{Cand{\`{e}}s
+  et~al.}(2006{\natexlab{a}})\citenamefont{Cand{\`{e}}s, Romberg, and
+  Tao}}]{Candes2006}
+\bibinfo{author}{\bibfnamefont{E.~J.} \bibnamefont{Cand{\`{e}}s}},
+  \bibinfo{author}{\bibfnamefont{J.~K.} \bibnamefont{Romberg}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Tao}},
+  \bibinfo{title}{{Stable signal recovery from incomplete and inaccurate
+  measurements}},
+  \href{http://dx.doi.org/10.1002/cpa.20124}{\emph{\bibinfo{journal}{Commun.
+  Pure Appl. Math.}}
+  }\href{http://dx.doi.org/10.1002/cpa.20124}{\textbf{\bibinfo{volume}{59}},
+  \bibinfo{pages}{1207}} (\bibinfo{year}{2006}{\natexlab{a}}), ISSN
+  \bibinfo{issn}{00103640}, \eprint{0503066v2}.
+
+\bibitem[{\citenamefont{Donoho}(2006)}]{Donoho2006}
+\bibinfo{author}{\bibfnamefont{D.~L.} \bibnamefont{Donoho}},
+  \bibinfo{title}{{Compressed sensing}},
+  \href{http://dx.doi.org/10.1109/TIT.2006.871582}{\emph{\bibinfo{journal}{IEEE
+  Trans. Inf. Theory}}
+  }\href{http://dx.doi.org/10.1109/TIT.2006.871582}{\textbf{\bibinfo{volume}{52}},
+  \bibinfo{pages}{1289}} (\bibinfo{year}{2006}), ISSN \bibinfo{issn}{00189448}.
+
+\bibitem[{\citenamefont{Donoho and Huo}(2001)}]{Donoho2001}
+\bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Donoho}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{X.}~\bibnamefont{Huo}},
+  \bibinfo{title}{{Uncertainty principles and ideal atomic decomposition}},
+  \href{http://dx.doi.org/10.1109/18.959265}{\emph{\bibinfo{journal}{IEEE
+  Trans. Inf. Theory}}
+  }\href{http://dx.doi.org/10.1109/18.959265}{\textbf{\bibinfo{volume}{47}},
+  \bibinfo{pages}{2845}} (\bibinfo{year}{2001}), ISSN \bibinfo{issn}{00189448}.
+
+\bibitem[{\citenamefont{Donoho and Elad}(2003)}]{Donoho2003}
+\bibinfo{author}{\bibfnamefont{D.~L.} \bibnamefont{Donoho}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Elad}},
+  \bibinfo{title}{{Optimally sparse representation in general (nonorthogonal)
+  dictionaries via L1 minimization}},
+  \href{http://dx.doi.org/10.1073/pnas.0437847100}{\emph{\bibinfo{journal}{Proc.
+  Natl. Acad. Sci. U. S. A.}}
+  }\href{http://dx.doi.org/10.1073/pnas.0437847100}{\textbf{\bibinfo{volume}{100}},
+  \bibinfo{pages}{2197}} (\bibinfo{year}{2003}), ISSN \bibinfo{issn}{00278424}.
+
+\bibitem[{\citenamefont{Linh-Trung et~al.}(2008)\citenamefont{Linh-Trung, {Van
+  Phong}, Hussain, Huynh, Morgan, and Gore}}]{LinhTrung2008}
+\bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Linh-Trung}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{{Van Phong}}},
+  \bibinfo{author}{\bibfnamefont{Z.~M.} \bibnamefont{Hussain}},
+  \bibinfo{author}{\bibfnamefont{H.~T.} \bibnamefont{Huynh}},
+  \bibinfo{author}{\bibfnamefont{V.~L.} \bibnamefont{Morgan}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{J.~C.} \bibnamefont{Gore}},
+  \bibinfo{title}{{Compressed sensing using chaos filters}},
+  \href{http://dx.doi.org/10.1109/ATNAC.2008.4783326}{\emph{\bibinfo{journal}{Proc.
+  2008 Australas. Telecommun. Networks Appl. Conf. ATNAC 2008}}
+  }\href{http://dx.doi.org/10.1109/ATNAC.2008.4783326}{
+  \bibinfo{pages}{219--223}} (\bibinfo{year}{2008}).
+
+\bibitem[{\citenamefont{Dabov et~al.}(2007)\citenamefont{Dabov, Foi, Katkovnik,
+  and Egiazarian}}]{Dabov2007}
+\bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Dabov}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Foi}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Katkovnik}},
+  \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Egiazarian}},
+  \bibinfo{title}{{Image denoising by sparse 3-D transform-domain collaborative
+  filtering}},
+  \href{http://dx.doi.org/10.1109/TIP.2007.901238}{\emph{\bibinfo{journal}{IEEE
+  Trans. Image Process.}}
+  }\href{http://dx.doi.org/10.1109/TIP.2007.901238}{\textbf{\bibinfo{volume}{16}},
+  \bibinfo{pages}{2080}} (\bibinfo{year}{2007}), ISSN \bibinfo{issn}{10577149},
+  \eprint{arXiv:1011.1669v3}.
+
+\bibitem[{\citenamefont{Iliadis et~al.}(2018)\citenamefont{Iliadis, Spinoulas,
+  and Katsaggelos}}]{Iliadis2018}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Iliadis}},
+  \bibinfo{author}{\bibfnamefont{L.}~\bibnamefont{Spinoulas}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{A.~K.}
+  \bibnamefont{Katsaggelos}}, \bibinfo{title}{{Deep fully-connected networks
+  for video compressive sensing}},
+  \href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\emph{\bibinfo{journal}{Digit.
+  Signal Process. A Rev. J.}}
+  }\href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\textbf{\bibinfo{volume}{72}},
+  \bibinfo{pages}{9}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{10512004}.
+
+\bibitem[{\citenamefont{Yao et~al.}(2019)\citenamefont{Yao, Dai, Zhang, Zhang,
+  Tian, and Xu}}]{Yao2019}
+\bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Yao}},
+  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Dai}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{Q.}~\bibnamefont{Tian}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Xu}},
+  \bibinfo{title}{{DR2-Net: Deep Residual Reconstruction Network for image
+  compressive sensing}},
+  \href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\emph{\bibinfo{journal}{Neurocomputing}}
+  }\href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\textbf{\bibinfo{volume}{359}},
+  \bibinfo{pages}{483}} (\bibinfo{year}{2019}), ISSN \bibinfo{issn}{18728286}.
+
+\bibitem[{\citenamefont{Shannon}(1949)}]{Shannon1949}
+\bibinfo{author}{\bibfnamefont{C.~E.} \bibnamefont{Shannon}},
+  \bibinfo{title}{Communication in the presence of noise},
+  \href{http://dx.doi.org/10.1109/jrproc.1949.232969}{\emph{\bibinfo{journal}{Proceedings
+  of the Institute of Radio Engineers}}
+  }\href{http://dx.doi.org/10.1109/jrproc.1949.232969}{\textbf{\bibinfo{volume}{37}},
+  \bibinfo{pages}{10}} (\bibinfo{year}{1949}).
+
+\bibitem[{\citenamefont{Mazumdar and Rawat}(2015)}]{Mazumdar2015}
+\bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Mazumdar}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{A.~S.} \bibnamefont{Rawat}},
+  \bibinfo{title}{{Associative memory via a sparse recovery model}},
+  \emph{\bibinfo{journal}{Adv. Neural Inf. Process. Syst.}}
+  \bibinfo{pages}{2701--2709} (\bibinfo{year}{2015}), ISSN
+  \bibinfo{issn}{10495258}.
+
+\bibitem[{\citenamefont{Cand{\`{e}}s
+  et~al.}(2006{\natexlab{b}})\citenamefont{Cand{\`{e}}s, Romberg, and
+  Tao}}]{Candes2006a}
+\bibinfo{author}{\bibfnamefont{E.~J.} \bibnamefont{Cand{\`{e}}s}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Romberg}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Tao}},
+  \bibinfo{title}{{Robust uncertainty principles: Exact signal reconstruction
+  from highly incomplete frequency information}},
+  \href{http://dx.doi.org/10.1109/TIT.2005.862083}{\emph{\bibinfo{journal}{IEEE
+  Trans. Inf. Theory}}
+  }\href{http://dx.doi.org/10.1109/TIT.2005.862083}{\textbf{\bibinfo{volume}{52}},
+  \bibinfo{pages}{489}} (\bibinfo{year}{2006}{\natexlab{b}}), ISSN
+  \bibinfo{issn}{00189448}, \eprint{0409186}.
+
+\bibitem[{\citenamefont{Pedregosa et~al.}(2011)\citenamefont{Pedregosa,
+  Varoquaux, Gramfort, Michel, Thirion, Grisel, Blondel, Prettenhofer, Weiss,
+  Dubourg et~al.}}]{scikit-learn}
+\bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Pedregosa}},
+  \bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Varoquaux}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Gramfort}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Michel}},
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{Thirion}},
+  \bibinfo{author}{\bibfnamefont{O.}~\bibnamefont{Grisel}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Blondel}},
+  \bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Prettenhofer}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Weiss}},
+  \bibinfo{author}{\bibfnamefont{V.}~\bibnamefont{Dubourg}},
+  \bibnamefont{et~al.}, \bibinfo{title}{Scikit-learn: Machine learning in
+  {P}ython}, \emph{\bibinfo{journal}{Journal of Machine Learning Research}}
+  \textbf{\bibinfo{volume}{12}}, \bibinfo{pages}{2825} (\bibinfo{year}{2011}).
+
+\bibitem[{\citenamefont{Hopfield}(1982)}]{Hopfield1982}
+\bibinfo{author}{\bibfnamefont{J.~J.} \bibnamefont{Hopfield}},
+  \bibinfo{title}{{Neural networks and physical systems with emergent
+  collective computational abilities}},
+  \href{http://dx.doi.org/10.1073/pnas.79.8.2554}{\emph{\bibinfo{journal}{Proc.
+  Natl. Acad. Sci. U. S. A.}}
+  }\href{http://dx.doi.org/10.1073/pnas.79.8.2554}{\textbf{\bibinfo{volume}{79}},
+  \bibinfo{pages}{2554}} (\bibinfo{year}{1982}).
+
+\bibitem[{\citenamefont{Cho et~al.}(2014)\citenamefont{Cho, {Van
+  Merri{\"{e}}nboer}, Gulcehre, Bahdanau, Bougares, Schwenk, and
+  Bengio}}]{Cho2014}
+\bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Cho}},
+  \bibinfo{author}{\bibfnamefont{B.}~\bibnamefont{{Van Merri{\"{e}}nboer}}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Gulcehre}},
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Bahdanau}},
+  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Bougares}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Schwenk}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Bengio}},
+  \bibinfo{title}{{Learning phrase representations using RNN encoder-decoder
+  for statistical machine translation}},
+  \href{http://dx.doi.org/10.3115/v1/d14-1179}{\emph{\bibinfo{journal}{EMNLP
+  2014 - 2014 Conf. Empir. Methods Nat. Lang. Process. Proc. Conf.}}
+  }\href{http://dx.doi.org/10.3115/v1/d14-1179}{ \bibinfo{pages}{1724--1734}}
+  (\bibinfo{year}{2014}), \eprint{1406.1078}.
+
+\end{thebibliography}
