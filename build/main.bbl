@@ -222,6 +222,32 @@
   }\href{http://dx.doi.org/10.1109/ATNAC.2008.4783326}{
   \bibinfo{pages}{219--223}} (\bibinfo{year}{2008}).
 
+\bibitem[{\citenamefont{Yao et~al.}(2019)\citenamefont{Yao, Dai, Zhang, Zhang,
+  Tian, and Xu}}]{Yao2019}
+\bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Yao}},
+  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Dai}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{Q.}~\bibnamefont{Tian}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Xu}},
+  \bibinfo{title}{{DR2-Net: Deep Residual Reconstruction Network for image
+  compressive sensing}},
+  \href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\emph{\bibinfo{journal}{Neurocomputing}}
+  }\href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\textbf{\bibinfo{volume}{359}},
+  \bibinfo{pages}{483}} (\bibinfo{year}{2019}), ISSN \bibinfo{issn}{18728286}.
+
+\bibitem[{\citenamefont{Iliadis et~al.}(2018)\citenamefont{Iliadis, Spinoulas,
+  and Katsaggelos}}]{Iliadis2018}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Iliadis}},
+  \bibinfo{author}{\bibfnamefont{L.}~\bibnamefont{Spinoulas}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{A.~K.}
+  \bibnamefont{Katsaggelos}}, \bibinfo{title}{{Deep fully-connected networks
+  for video compressive sensing}},
+  \href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\emph{\bibinfo{journal}{Digit.
+  Signal Process. A Rev. J.}}
+  }\href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\textbf{\bibinfo{volume}{72}},
+  \bibinfo{pages}{9}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{10512004}.
+
 \bibitem[{\citenamefont{Dabov et~al.}(2007)\citenamefont{Dabov, Foi, Katkovnik,
   and Egiazarian}}]{Dabov2007}
 \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Dabov}},
@@ -236,32 +262,6 @@
   }\href{http://dx.doi.org/10.1109/TIP.2007.901238}{\textbf{\bibinfo{volume}{16}},
   \bibinfo{pages}{2080}} (\bibinfo{year}{2007}), ISSN \bibinfo{issn}{10577149},
   \eprint{arXiv:1011.1669v3}.
-
-\bibitem[{\citenamefont{Iliadis et~al.}(2018)\citenamefont{Iliadis, Spinoulas,
-  and Katsaggelos}}]{Iliadis2018}
-\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Iliadis}},
-  \bibinfo{author}{\bibfnamefont{L.}~\bibnamefont{Spinoulas}},
-  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{A.~K.}
-  \bibnamefont{Katsaggelos}}, \bibinfo{title}{{Deep fully-connected networks
-  for video compressive sensing}},
-  \href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\emph{\bibinfo{journal}{Digit.
-  Signal Process. A Rev. J.}}
-  }\href{http://dx.doi.org/10.1016/j.dsp.2017.09.010}{\textbf{\bibinfo{volume}{72}},
-  \bibinfo{pages}{9}} (\bibinfo{year}{2018}), ISSN \bibinfo{issn}{10512004}.
-
-\bibitem[{\citenamefont{Yao et~al.}(2019)\citenamefont{Yao, Dai, Zhang, Zhang,
-  Tian, and Xu}}]{Yao2019}
-\bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Yao}},
-  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Dai}},
-  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Zhang}},
-  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Zhang}},
-  \bibinfo{author}{\bibfnamefont{Q.}~\bibnamefont{Tian}}, \bibnamefont{and}
-  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Xu}},
-  \bibinfo{title}{{DR2-Net: Deep Residual Reconstruction Network for image
-  compressive sensing}},
-  \href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\emph{\bibinfo{journal}{Neurocomputing}}
-  }\href{http://dx.doi.org/10.1016/j.neucom.2019.05.006}{\textbf{\bibinfo{volume}{359}},
-  \bibinfo{pages}{483}} (\bibinfo{year}{2019}), ISSN \bibinfo{issn}{18728286}.
 
 \bibitem[{\citenamefont{Shannon}(1949)}]{Shannon1949}
 \bibinfo{author}{\bibfnamefont{C.~E.} \bibnamefont{Shannon}},
