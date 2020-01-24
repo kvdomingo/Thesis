@@ -10,7 +10,7 @@
 \usepackage{graphicx}      % for importing eps figures
 \usepackage{amsmath}       % for advanced math symbols
 \usepackage[affil-sl]{authblk} 			% found in preprint bundle package, http://ctan.org/pkg/preprint
-\usepackage[a4paper, top=1in, bottom=1in, left=1in, right=1in, bindingoffset=0.5in]{geometry} % paper and margin formats as set by SPP
+\usepackage[a4paper, top=1in, bottom=2.5in, left=1in, right=1in, bindingoffset=0.5in]{geometry} % paper and margin formats as set by SPP
 %\usepackage{subfig}
 
 \parindent 0.5in    % paragraphs indent
@@ -95,7 +95,7 @@
 \fancypagestyle{titlestyle}
 {
 \renewcommand{\headrulewidth}{0.1pt}
-\renewcommand{\footrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0pt}
 \fancyhf[l]{}
 \fancyhf[c]{ }
 \fancyhf[r]{ }
@@ -106,7 +106,7 @@
 
 % styling for the second page onwards
 \renewcommand{\headrulewidth}{0.1pt}
-\renewcommand{\footrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0pt}
 \fancyhf[l]{}
 \fancyhf[r]{}
 \fancyhf[c]{}
