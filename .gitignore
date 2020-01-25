@@ -9,3 +9,7 @@ venv.bak/
 
 # LaTeX build files
 build/
+*.synctex.gz
+
+# Misc
+*.docx
