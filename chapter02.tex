@@ -1,47 +1,12 @@
 \section{Compressive sensing}
 \label{sec:cs}
 
-Nearly all of today's signal acquisition technologies, consumer and large-scale usage alike, were made possible thanks to the Nyquist-Shannon sampling theorem (NST). This states that given that you know a signal's highest frequency component $f_B$, sampling it at a rate $f_S$ that is at least twice this frequency is sufficient to capture all of the pertinent information regarding that signal; that is $f_s \geq 2f_B$, where $f_B$ is known as the Nyquist rate \cite{Shannon1949}.
+Nearly all of today's signal acquisition technologies were made possible thanks to the Nyquist-Shannon sampling theorem (NST). This states that given that you know a signal's highest frequency component $f_B$, sampling it at a rate $f_S$ that is at least twice this frequency is sufficient to capture all of the pertinent information regarding that signal; that is $f_S \geq 2f_B$, where $f_B$ is known as the Nyquist rate \cite{Shannon1949}, and also as the signal bandwidth. For signals that are not naturally bandlimited, such as images, the ability reproduce a signal is dependent on the device's resolution and still follows the same principle: there should be at least twice the number of pixels in the same dimension as the image's highest spatial frequency. For practical day-to-day use, the NST covers everything you need. However, issues arise when bandwidth and storage are at a premium. Typically, after sensing a signal, not all of the raw data is stored. Rather, this data is converted to a compressed format by systematically discarding the imperceptible information. Thus, the process of acquiring massive amounts of data followed by compression is extremely wasteful \cite{Candes2008b}, and so the goal of CS is to directly acquire the information which survives the compression stage.
 
-Consider a real-valued signal $\vec{x} \in \mathbb{R}^N$. The process acquisition or ``sensing'' of this signal can be modeled as a linear system, where the physical signal values are transformed into values that can be understood by some sensing device by applying a linear transformation as
+Consider a real-valued signal $\vec{x} \in \mathbb{R}^{N \times 1}$. The process of acquisition or sensing this signal can be modeled as a linear system, where the physical signal values are transformed into values that can be understood by some sensing device by applying a linear transformation as
 
 \begin{equation}\label{eq:cesa}
     \vec{y} = \vec{A}\vec{x}
 \end{equation}
 
-\noindent where $\vec{A}$ is the transformation commonly known as a sensing matrix. In the standard-use case
-
-According to the NST, a periodic signal---which may be composed of a linear superposition of sinusoids with different parameters---has a characteristic bandwidth $f_B$, defined by its highest frequency component. The signal can be successfully reconstructed by a sampling device if the signal is sampled at a fixed rate with frequency $f_s$, which is at least twice $f_B$; that is $f_s \geq 2f_B$, where $2f_B$ is known as the Nyquist rate. Under the NST, the original signal $\vec{x}$ in \eqref{eq:cesa} can be recovered by inversion, least squares approximation, or more commonly, sinc interpolation. More often than not, the inversion of \eqref{eq:cesa} is ill-posed because it is an underdetermined system. However, recovery is still possible provided that $\vec{x}$ is sparse or can be represented sparsely in some domain, and $\vec{A}$ satisfies one of the following properties \cite{Mazumdar2015}:
-\begin{itemize}
-	\item \textbf{Low mutual coherence}: The mutual coherence of a matrix $\vec{A}$ is defined as
-	\begin{equation}
-		\mu(\vec{A}) = \max_{i \neq j} \abs{\innerproduct{\vec{a}_i}{\vec{a}_j}}
-	\end{equation}
-	\item \textbf{Restricted isometry property} (RIP): Matrix $\vec{A}$ satisfies the RIP with sparsity parameter $k$ and restricted isometry constant $\delta$ if for all $k$-sparse vectors $\vec{x}$,
-	\begin{equation}
-		\qty(1 - \delta)\norm{\vec{x}}_2^2 \leq \norm{\vec{Ax}}_2^2 \leq \qty(1 - \delta)\norm{\vec{x}}_2^2
-	\end{equation}
-	\noindent The sparsity parameter $k$ entails that a vector has, at most, $k$ nonzero coefficients, in which case the vector is said to be $k$-sparse \cite{Candes2006}.
-\end{itemize}
-
-\noindent Once these have been satisfied, $\vec{x}$ can be recovered exactly from the compressive measurements $\vec{y}$ by solving the combinatorial minimization problem
-
-\begin{equation}\label{eq:min-l0}
-	\min \norm{\vec{x}}_0 \quad \textrm{subject to} \quad \vec{Ax = y}
-\end{equation}
-
-\noindent where $\norm{\vec{x}}_0$ denotes the $\ell_0$ pseudo-norm of $\vec{x}$, which extracts the number of nonzero coefficients. However, this problem is computationally intractable even for a small signal. A more tractable solution is to reduce this to a convex problem
-
-\begin{equation}\label{eq:min-l1}
-	\min \norm{\vec{x}}_1 \quad \textrm{subject to} \quad \vec{Ax = y}
-\end{equation}
-
-\noindent where $\norm{\vec{x}}_1 \equiv \sum_i \abs{x_i}$ denotes the $\ell_1$ norm of $\vec{x}$. For a sufficiently sparse signal, the solutions to \eqref{eq:min-l0} and \eqref{eq:min-l1} are identical \cite{Candes2006a}. A plethora of algorithms exist dedicated to solving \eqref{eq:min-l1}. The scope of this study utilizes the following algorithms used commonly in the literature:
-
-\begin{itemize}
-	\item \textbf{Least absolute shrinkage and selection operator} (LASSO): recasts the $\ell_1$ minimization problem as an $\ell_1$-regularized least squares problem:
-	\begin{equation}
-		\min_{\vec{x}} \frac{1}{2N} \norm{\vec{y} - \vec{Ax}}_2^2 + \alpha \norm{\vec{x}}_1
-	\end{equation}
-	where $\alpha$ is the regularization hyperparameter. Optimization is performed via coordinate descent \cite{scikit-learn}.
-\end{itemize}
+\noindent where $\vec{A} \in \mathbb{R}^{M \times N}$ is the transformation commonly known as a sensing matrix. In the NST case, $\vec{A}$ is a square matrix ($M = N$), and one could easily reconstruct $\vec{x}$ by inversion. However, we are interested in the case when the signal is undersampled, i.e., the number of measurements is less than the size of the signal ($M \ll N$).
