@@ -1,23 +1,17 @@
 \section{Compressive sensing}
 \label{sec:cs}
 
-Consider a signal which we wish to capture. This signal is real-valued and, depending on its dimensionality, can be represented as either a vector or a matrix. The acquisition of this signal can be modeled as a linear system, where the real signal values are transformed into values that can be understood by some sensing device or computer by applying a linear transformation by
+Nearly all of today's signal acquisition technologies, consumer and large-scale usage alike, were made possible thanks to the Nyquist-Shannon sampling theorem (NST). This states that given that you know a signal's highest frequency component $f_B$, sampling it at a rate $f_S$ that is at least twice this frequency is sufficient to capture all of the pertinent information regarding that signal; that is $f_s \geq 2f_B$, where $f_B$ is known as the Nyquist rate \cite{Shannon1949}.
+
+Consider a real-valued signal $\vec{x} \in \mathbb{R}^N$. The process acquisition or ``sensing'' of this signal can be modeled as a linear system, where the physical signal values are transformed into values that can be understood by some sensing device by applying a linear transformation as
 
 \begin{equation}\label{eq:cesa}
-    \vec{y} = \innerproduct{\vec{x}}{\vec{A}}
+    \vec{y} = \vec{A}\vec{x}
 \end{equation}
 
-\noindent where $\vec{A}$ is the transformation commonly known as a sensing matrix.
+\noindent where $\vec{A}$ is the transformation commonly known as a sensing matrix. In the standard-use case
 
-Consider a discrete time signal $\vec{x} \in \mathbb{R}^N$. Consider also an orthonormal basis $\bm\Psi \in \mathbb{R}^{N \times N}$ whose column vectors are expressed as $\bm\psi_i$. The signal $\vec{x}$ can be expressed as
-
-\begin{equation}\label{eq:signal-transform}
-	\vec{x} = \innerproduct{\bm\alpha}{\bm\Psi}
-\end{equation}
-
-\noindent where $\alpha_i$ are the coefficients of $\vec{x}$ in the $\bm\Psi$ domain. For practical signal processing applications, a sampled signal is usually of lower dimension than its original representation. We define the compressed vector $\vec{y} \in \mathbb{R}^M$, $M < N$ which is obtained by
-
-\noindent where $\vec{A} \in \mathbb{R}^{M \times N}$ ($M \leq N$) is the sensing matrix. According to the NST, a periodic signal---which may be composed of a linear superposition of sinusoids with different parameters---has a characteristic bandwidth $f_B$, defined by its highest frequency component. The signal can be successfully reconstructed by a sampling device if the signal is sampled at a fixed rate with frequency $f_s$, which is at least twice $f_B$; that is $f_s \geq 2f_B$, where $2f_B$ is known as the Nyquist rate \cite{Shannon1949}. Under the NST, the original signal $\vec{x}$ in \eqref{eq:cesa} can be recovered by inversion, least squares approximation, or more commonly, sinc interpolation. More often than not, the inversion of \eqref{eq:cesa} is ill-posed because it is an underdetermined system. However, recovery is still possible provided that $\vec{x}$ is sparse or can be represented sparsely in some domain, and $\vec{A}$ satisfies one of the following properties \cite{Mazumdar2015}:
+According to the NST, a periodic signal---which may be composed of a linear superposition of sinusoids with different parameters---has a characteristic bandwidth $f_B$, defined by its highest frequency component. The signal can be successfully reconstructed by a sampling device if the signal is sampled at a fixed rate with frequency $f_s$, which is at least twice $f_B$; that is $f_s \geq 2f_B$, where $2f_B$ is known as the Nyquist rate. Under the NST, the original signal $\vec{x}$ in \eqref{eq:cesa} can be recovered by inversion, least squares approximation, or more commonly, sinc interpolation. More often than not, the inversion of \eqref{eq:cesa} is ill-posed because it is an underdetermined system. However, recovery is still possible provided that $\vec{x}$ is sparse or can be represented sparsely in some domain, and $\vec{A}$ satisfies one of the following properties \cite{Mazumdar2015}:
 \begin{itemize}
 	\item \textbf{Low mutual coherence}: The mutual coherence of a matrix $\vec{A}$ is defined as
 	\begin{equation}
