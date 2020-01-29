@@ -1,0 +1,54 @@
+\documentclass[10pt,oneside]{article}
+\usepackage[a4paper,top=0.5in,bottom=0.5in,left=0.5in,right=0.5in]{geometry}
+\usepackage{setspace}\onehalfspacing
+\usepackage{fancyhdr}
+\fancyhead[l]{Kenneth V. Domingo \\ BS Applied Physics (Instrumentation)}
+\pagenumbering{gobble}
+\pagestyle{fancy}
+\parindent 0pt
+\parskip=0.25em
+\pretolerance=5000
+\tolerance=9000
+\emergencystretch=0pt
+\righthyphenmin=4
+\lefthyphenmin=4
+
+\begin{document}
+
+\subsubsection*{Tentative Title} Compressive Sensing: Applications from 1-D to $N$-D
+
+\subsubsection*{PACS}
+
+\subsubsection*{Problem Statement}
+I present a generalization of compressive sensing to signals of arbitrary dimensions for applications such as compression, encryption, and enhancement.
+
+\subsubsection*{Significance}
+Modern signal acquisition technologies are made possible by the Nyquist-Shannon sampling theorem (NST) which states that all the pertinent signal information can be acquired by sampling it at a rate at least twice the signal's highest frequency. However, this process is extremely wasteful as the signal is compressed before storing it by systematically discarding the imperceptible information. Compressive sensing (CS) aims to directly sense the information that survives the compression stage. Current literature focus exclusively on either audio or image signals. This study aims to be able to process signals of arbitrary dimensions such as those consisting of combinations of audio and images.
+
+\subsubsection*{Methodology}
+\begin{enumerate}
+	\item Prepare the data to be compressively sensed which includes speech recordings, images, and video.
+	\item A general CS workflow can be developed separately for audio signals and image signals. A high-dimensional signal can be split into a combination of these two and processed by the algorithms appropriate for each type of signal.
+	\item Identify appropriate quantitative metrics for each type of signal which is relatively intuitive in the qualitative sense.
+	\item Apply these metrics to the processed signals.
+\end{enumerate}
+
+\subsubsection*{Major References}
+\begin{enumerate}
+	\item E. J. Cand\`{e}s, J. K. Romberg, and T. Tao, Stable signal recovery from incomplete and inaccurate measurements, \textit{Commun. Pure Appl. Math.} \textbf{59}, 1207 (2006), arXiv:0503066v2.
+	\item M. Iliadis, L. Spinoulas, and A. K. Katsaggelos, Deep fully-connected networks for video compressive sensing, \textit{Digit. Signal Process. A Rev. J.} \textbf{72}, 9 (2018).
+	\item S. Y. Low, D. S. Pham, and S. Venkatesh, Compressive speech enhancement, \textit{Speech Commun.} \textbf{55}, 757 (2013).
+\end{enumerate}
+
+\medskip
+
+Submitted by: \\
+\smallskip \\
+Kenneth V. Domingo \\
+
+Endorsed by: \\
+\smallskip \\
+Maricor N. Soriano \\
+Thesis Adviser
+
+\end{document}
