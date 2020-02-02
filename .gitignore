@@ -1,3 +1,6 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+
 # Environments
 .env
 .venv
@@ -10,6 +13,7 @@ venv.bak/
 # LaTeX build files
 build/
 *.synctex.gz
+*.log
 
 # Misc
 *.docx
