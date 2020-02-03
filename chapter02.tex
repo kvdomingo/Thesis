@@ -19,6 +19,7 @@ Consider a signal $\vec{x} \in \mathbb{R}^{n}$; this notaton indicates that $\ve
 \noindent In conventional sampling, $\vec{a}_k$ are Dirac basis vectors which turn $\vec{y}$ into a vector containing samples of $\vec{x}$ in the temporal or spatial domain; if $\vec{a}_k$ are Fourier basis vectors (i.e., sinusoids), then $\vec{y}$ is a vector of Fourier coefficients. If the signal has been sampled sufficiently in the sense that the number of measurements $m$ is equal to the dimension $n$ of the signal, then $\vec{A}$ is a square matrix, and the original signal $\vec{x}$ can be reconstructed from the information vector $\vec{y}$ by inversion of \eqref{eq:cesa-linear}. However, the process of recovering $\vec{x} \in \mathbb{R}^n$ from $\vec{y} \in \mathbb{R}^m$ becomes ill-posed when we consider the undersampled case (i.e., when $m \ll n$), as the sensing matrix $\vec{A} \in \mathbb{R}^{m \times n}$---whose row vectors are denoted as $\vec{a}_m$---causes the system to become underdetermined: there exist infinitely many candidate solutions $\hat{\vec{x}}$ which satisfy \eqref{eq:cesa-linear}. To add to this, we also consider the possibility that the measurements are not perfect, and are contaminated with various types of noise. How then do we recover a signal from measurements which are incomplete and most likely inaccurate? The answer lies in enforcing constraints based on models of natural signals.
 
 \subsection{Sparsity}
+\label{ssec:sparsity}
 
 Most natural signals, especially those with some underlying periodicity, can be represented sparsely when expressed in the appropriate basis. This process of ``sparsifying'' can be expressed as
 
@@ -38,10 +39,22 @@ Most natural signals, especially those with some underlying periodicity, can be 
 	x_k = \frac{1}{2}f_0 + \sum_{n=1}^{N-1} f_n \cos\qty[\frac{\pi}{N}n \qty(k + \frac{1}{2})] , \quad 0 \leq k < N
 \end{equation}
 
-\noindent We can express \eqref{eq:dct} more conveniently as $\vec{f} = \bm\Psi \vec{x}$, where $\bm\Psi \in \mathbb{R}^{n \times n}$ is the sparsifying matrix. Figure \ref{fig:sparsity} shows this sparsifying process in action: given a test image, taking its DCT and zooming into the first 20,000 coefficients show that most of the signal energy is concentrated in just a few of the coefficients close to the DC term, and the compressed image resulting from discarding all but the first 25,000 coefficients and inverting shows that any difference from the original image is virtually imperceptible. A similar concept is used in JPEG compression, wherein an image is divided into $8 \times 8$ blocks, and in each block, a certain number of DCT components are discarded depending on the set quality factor $Q$ \cite{itu-jpeg}.
+\noindent We can express \eqref{eq:dct} more conveniently as $\vec{f} = \bm\Psi \vec{x}$, where $\bm\Psi \in \mathbb{R}^{n \times n}$ is the sparsifying matrix. Figure \ref{fig:sparsity} shows this sparsifying process in action: given a test image, taking its DCT and zooming into the first 20,000 coefficients show that most of the signal energy is concentrated in just a few of the coefficients close to the DC term and decay rapidly. All the other coefficients, when compared to the $k$ highest coefficients, are practically zero; such a signal is referred to as $k$-sparse. The compressed image resulting from discarding all but the first 25,000 coefficients and performing the inverse transform shows that any difference from the original image is virtually imperceptible. A similar concept is used in JPEG compression, wherein an image is divided into $8 \times 8$ blocks, and in each block, a certain number of DCT components are discarded depending on the desired quality factor $Q$ \cite{itu-jpeg}.
 
 \begin{figure}[htb]
 	\includegraphics[width=\textwidth]{C2-sparsity.png}
-	\caption{Original $512 \times 512$, 8-bit image (left), and its first 20,000 DCT coefficients (middle). Most of the signal energy is concentrated in just a few of the coefficients that are close to the origin. By discarding all but the first 25,000 coefficients and then inverting it, the resulting image (right) is perceptually no different from the original.}
+	\caption{Original $512 \times 512$, 8-bit image (left), and its first 20,000 DCT coefficients (middle). Most of the signal energy is concentrated in just a few of the coefficients that are close to the origin. By discarding all but the first 25,000 coefficients and performing the inverse transform, the resulting image (right) is perceptually no different from the original.}
 	\label{fig:sparsity}
 \end{figure}
+
+
+\subsection{Incoherence}
+\label{ssec:incoherence}
+
+Suppose we have two matrices $\bm\Phi$ and $\bm\Psi$ which are involved in the sensing of a signal. As before, $\bm\Psi$ is the sparsifying matrix which converts the signal into a sparse representation, and $\bm\Phi$ is the actual sensing matrix. The coherence between these two bases is expressed as
+
+\begin{equation}\label{eq:coherence}
+	\mu\qty(\bm\Phi, \bm\Psi) = \sqrt{n} \max_{0 \leq i,j < n} \abs{\innerproduct{\bm\varphi_i}{\bm\psi_j}}
+\end{equation}
+
+\noindent In other words, the coherence is the measure of the largest correlation between the column vectors of $\bm\Phi$ and $\bm\Psi$. In compressive sensing, we are interested in low-coherence basis pairs (i.e., basis pairs for which $\mu \rightarrow 1$). For example, in most of the applications in this study, $\bm\Phi$ is the Dirac basis $\bm\varphi_k(t) = \delta(t - k)$, and $\bm\Psi$ is the DCT basis \eqref{eq:dct}.

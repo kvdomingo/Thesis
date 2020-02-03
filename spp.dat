@@ -16,12 +16,6 @@
 \parindent 0.5in    % paragraphs indent
 %\topmargin=-2cm
 
-% SPP details
-\newcommand{\spp}{37\textsuperscript{th}}
-\newcommand{\sppvenue}{Panglao Island, Bohol}
-\newcommand{\sppdate}{28 May\,--\,1 June 2019}
-
-
 % title style
 \newcommand*{\TitleFont}{\bfseries \Large }
 
