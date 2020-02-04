@@ -13,7 +13,7 @@ Consider a signal $\vec{x} \in \mathbb{R}^{n}$; this notaton indicates that $\ve
 	y_k = \innerproduct{\vec{x}}{\vec{a}_k} , \quad k \in \mathbb{N} \leq n
 \end{equation}
 
-\noindent In conventional sampling, $\vec{a}_k$ are Dirac basis vectors which turn $\vec{y}$ into a vector containing samples of $\vec{x}$ in the temporal or spatial domain; if $\vec{a}_k$ are Fourier basis vectors (i.e., sinusoids), then $\vec{y}$ is a vector of Fourier coefficients. If the signal has been sampled sufficiently in the sense that the number of measurements $m$ is equal to the dimension $n$ of the signal, then $\vec{A}$ is a square matrix, and the original signal $\vec{x}$ can be reconstructed from the information vector $\vec{y}$ by inversion of \eqref{eq:cesa-linear}. However, the process of recovering $\vec{x} \in \mathbb{R}^n$ from $\vec{y} \in \mathbb{R}^m$ becomes ill-posed when we consider the undersampled case ($m \ll n$), as the sensing matrix $\vec{A} \in \mathbb{R}^{m \times n}$---whose row vectors are denoted as $\vec{a}_m$---causes the system to become underdetermined: there exist infinitely many candidate solutions $\bm\hat{\vec{x}}$ which satisfy \eqref{eq:cesa-linear}. To add to this, we also consider the possibility that the measurements are not perfect, and are contaminated with noise. How then do we recover a signal from measurements which are incomplete and most likely inaccurate? The answer lies in enforcing constraints based on models of natural signals, as well as constraints based on optimization techniques.
+In conventional sampling, $\vec{a}_k$ are Dirac basis vectors which turn $\vec{y}$ into a vector containing samples of $\vec{x}$ in the temporal or spatial domain; if $\vec{a}_k$ are Fourier basis vectors (i.e., sinusoids), then $\vec{y}$ is a vector of Fourier coefficients. If the signal has been sampled sufficiently in the sense that the number of measurements $m$ is equal to the dimension $n$ of the signal, then $\vec{A}$ is a square matrix, and the original signal $\vec{x}$ can be reconstructed from the information vector $\vec{y}$ by inversion of \eqref{eq:cesa-linear}. However, the process of recovering $\vec{x} \in \mathbb{R}^n$ from $\vec{y} \in \mathbb{R}^m$ becomes ill-posed when we consider the undersampled case ($m \ll n$), as the sensing matrix $\vec{A} \in \mathbb{R}^{m \times n}$---whose row vectors are denoted as $\vec{a}_m$---causes the system to become underdetermined: there exist infinitely many candidate solutions $\bm\hat{\vec{x}}$ which satisfy \eqref{eq:cesa-linear}. To add to this, we also consider the possibility that the measurements are not perfect, and are contaminated with noise. How then do we recover a signal from measurements which are incomplete and most likely inaccurate? The answer lies in enforcing constraints based on models of natural signals, as well as constraints based on optimization techniques.
 
 \section{Sparsity}
 \label{sec:sparsity}
@@ -24,7 +24,7 @@ Most natural signals, especially those with some underlying periodicity, can be 
 	f = \innerproduct{\vec{x}}{\bm\psi(k)}
 \end{equation}
 
-\noindent Similar to \eqref{eq:cesa-correlation}, this involves correlating the signal with the appropriate basis function to yield a representation in the sparse domain. Image information, for example, are commonly expressed in the DCT domain by
+Similar to \eqref{eq:cesa-correlation}, this involves correlating the signal with the appropriate basis function to yield a representation in the sparse domain. Image information, for example, are commonly expressed in the DCT domain by
 
 \begin{equation}\label{eq:dct}
 	f_k = \sum_{n=0}^{N-1} x_n \cos\qty[\frac{\pi}{N}\qty(n + \frac{1}{2})k] , \quad 0 \leq k < N
@@ -54,8 +54,27 @@ Suppose we have two matrices $\bm\Phi$ and $\bm\Psi$ which are involved in the s
 	\mu\qty(\bm\Phi, \bm\Psi) = \sqrt{n} \max_{0 \leq i,j < n} \abs{\innerproduct{\bm\varphi_i}{\bm\psi_j}}
 \end{equation}
 
-\noindent In other words, the coherence is the measure of the largest correlation between the column vectors of $\bm\Phi$ and $\bm\Psi$. In compressive sensing, we are interested in low-coherence basis pairs (i.e., basis pairs for which $\mu \rightarrow 1$). For example, in the classical sampling scheme, $\bm\Phi$ is the Dirac basis $\bm\varphi_k(t) = \delta(t - k)$, and $\bm\Psi$ is the DCT basis \eqref{eq:dct}. This basis pair in particular is also called a time-frequency pair and achieves maximum incoherence ($\mu = 1$) regardless of the number of dimensions \cite{Donoho2001}. Additionally, any orthonormal basis $\bm\Phi$ containing independent identically distributed (i.i.d.) entries are also largely incoherent with a fixed basis $\bm\Psi$ \cite{Candes2008b}. The consequence of this is that CS performs most efficiently when sensing with incoherent and random systems.
+In other words, the coherence is the measure of the largest correlation between the column vectors of $\bm\Phi$ and $\bm\Psi$. In compressive sensing, we are interested in low-coherence basis pairs (i.e., basis pairs for which $\mu \rightarrow 1$). For example, in the classical sampling scheme, $\bm\Phi$ is the Dirac basis $\bm\varphi_k(t) = \delta(t - k)$, and $\bm\Psi$ is the DCT basis \eqref{eq:dct}. This basis pair in particular is also called a time-frequency pair and achieves maximum incoherence ($\mu = 1$) regardless of the number of dimensions \cite{Donoho2001}. Additionally, any orthonormal basis $\bm\Phi$ containing independent identically distributed (i.i.d.) entries are also largely incoherent with a fixed basis $\bm\Psi$ \cite{Candes2008b}. The consequence of this is that CS performs most efficiently when sensing with incoherent and random systems.
 
 
 \section{Reconstruction strategies}
 \label{sec:reconstruct}
+Another measure of the sparsity of a signal its $\ell_0$ pseudo-norm, denoted $\norm{\vec{x}}_0$, which simply counts the number of non-zero coefficients of $\vec{x}$. As such, the goal of the reconstruction stage in CS is to find the sparsest representation of the vector $\vec{x}$ in terms of the sensing matrix $\bm\Phi$ by solving the combinatorial optimization problem
+
+\begin{equation}\label{eq:min-l0}
+	\min_\vec{x} \norm{\vec{x}}_0 \quad \textrm{subject to} \quad \vec{y} = \bm\Phi \vec{x}
+\end{equation}
+
+\noindent which, as the name implies, requires one to enumerate all possible $k$-element combinations of the columns of $\bm\Phi$, and determining the smallest combination which approximates the signal the closest. However, this process quickly becomes intractable even for a modestly-sized signal. This requirement is therefore relaxed by instead minimizing the $\ell_1$ norm
+
+\begin{equation}\label{eq:min-l1}
+	\min_\vec{x} \norm{\vec{x}}_1 \quad \textrm{subject to} \quad \vec{y} = \bm\Phi \vec{x}
+\end{equation}
+
+\noindent where the $\ell_1$ norm is defined as
+
+\begin{equation}\label{eq:l1-norm}
+	\norm{\vec{x}}_1 = \sum_{i=0}^{N-1} \abs{x_i}
+\end{equation}
+
+\noindent and is commonly called the taxicab or Manhattan distance. Aside from $\ell_1$ minimization, other approximation methods include greedy approaches (e.g., basis pursuit), and convex programming.
