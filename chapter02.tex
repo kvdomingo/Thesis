@@ -1,3 +1,6 @@
+\chapter{Preliminaries}
+\label{chap:theory}
+
 The trend of both curiosity and profit-driven human development has caused a
 surge in the amount of openly accessible raw data. More often than not, the data is generated much faster than it can be processed into something interpretable or useful. In the endeavor of keeping up with the inflow of information, there are two major factors that significantly hinder our progress. First, Moore’s law implicitly sets a physical limit to the number of transistors that can be placed on a chip, consequently limiting how powerful and how fast electronic systems can become (barring a paradigm shift in the fundamental design of semiconductors). The second is the Nyquist-Shannon sampling theorem (NST), which limits the range of frequencies a recording device can successfully capture. This states that given that you know a signal's highest frequency component $f_B$, sampling it at a rate $f_S$ that is at least twice this frequency is sufficient to capture all of the pertinent information regarding that signal: that is $f_S \geq 2f_B$, where $f_B$ is known as the Nyquist rate \cite{Shannon1949}, and also as the signal bandwidth. For signals that are not naturally bandlimited, such as images, the ability reproduce a signal is dependent on the device's resolution and still follows the same principle: there should be at least twice the number of pixels codimensional with the image's highest spatial frequency. For practical day-to-day use, the NST will suffice. However, issues arise when bandwidth and storage are at a premium. Typically, after sensing a signal, not all of the raw data is stored. Rather, this data is converted to a compressed format by systematically discarding values such that the loss of information is virtually imperceptible. Thus, the process of acquiring massive amounts of data followed by compression is extremely wasteful. CS aims to directly acquire the parts of the signal that would otherwise survive this compression stage in the classical sampling scheme.
 
@@ -77,7 +80,7 @@ Another measure of the sparsity of a signal is its $\ell_0$ norm, denoted $\norm
 	\norm{\vec{x}}_1 = \sum_{i=0}^{N-1} \abs{x_i}
 \end{equation}
 
-\noindent and is commonly called the taxicab or Manhattan distance. Most signals encountered in practical situations, however, are not sparse, but rather, approximately sparse. As mentioned earlier, any signal measurement will inevitably include some form of noise. Though $\ell_1$ minimization can definitely still be used (by casting it as a convex problem, as in the case of \cite{cvxpy,cvxpy_rewriting}), other algorithms opt for an $\ell_1$-regularized least squares approach as in the case of LASSO \cite{scikit-learn}, whose objective is
+\noindent and is commonly called the taxicab or Manhattan distance. Most signals encountered in practical situations, however, are not sparse but rather, approximately sparse. As mentioned earlier, any signal measurement will inevitably include some form of noise. Though $\ell_1$ minimization can definitely still be used (by casting it as a convex problem, as in the case of \cite{cvxpy,cvxpy_rewriting}), other algorithms opt for an $\ell_1$-regularized least squares approach as in the case of LASSO \cite{scikit-learn}, whose objective is
 
 \begin{equation}\label{eq:lasso}
 	\min_{\vec{x}} \frac{1}{2n} \norm{\vec{y} - \bm\Phi\vec{x}}_2^2 + \alpha\norm{\vec{x}}_1
@@ -89,6 +92,4 @@ Another measure of the sparsity of a signal is its $\ell_0$ norm, denoted $\norm
 	\min_{\vec{x}} \norm{\vec{y} - \bm\Phi \vec{x}}_2^2 \quad \textrm{subject to} \quad \norm{\vec{x}}_0 \leq k
 \end{equation}
 
-\noindent This method enforces the constraint that the reconstructed signal should be, at most, $k$-sparse in the selected coding dictionary $\bm\Phi$.
-
-There exist a plethora of algorithms dedicated to the decoding phase of CS. The ones mentioned above are primarily used in this study.
+\noindent This method enforces the constraint that the reconstructed signal should be, at most, $k$-sparse in the selected coding dictionary $\bm\Phi$. There exist a plethora of algorithms dedicated to the decoding phase of CS. The ones mentioned above are primarily used in this study.

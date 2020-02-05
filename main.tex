@@ -8,6 +8,7 @@
 \usepackage{lipsum}
 \usepackage{titlesec}
 \usepackage{microtype}
+\usepackage[all]{nowidow}
 \usepackage{bm}
 \renewcommand{\vec}[1]{\text{\bfseries #1}}
 \graphicspath{{images/}}
@@ -17,25 +18,42 @@
 \emergencystretch=0pt
 \righthyphenmin=4
 \lefthyphenmin=4
+%\widowpenalty10000
+%\clubpenalty10000
 \renewcommand*\thesection{\arabic{chapter}.\arabic{section}}
+
+\def\email#1{\gdef\@email{#1}}\email{}
+
 
 \begin{document}
 \pagenumbering{roman}
 
 \title{
-{\includegraphics[scale=0.15]{updlogo.png}} \\
-{\normalsize UNIVERSITY OF THE PHILIPPINES} \\ \bigskip
-{\bf COMPRESSIVE SENSING: APPLICATIONS FROM 1-D TO N-D}
+	\Large\uppercase\expandafter{Compressive sensing: Applications from 1-D to N-D
+	}
 }
 
 \author{
-{By} \\ \bigskip
-{\bf KENNETH V. DOMINGO} \\ \bigskip
-{\rm In Partial Fulfillment of the Requirements} \\
-{\rm For the Degree of} \\
-{\bf B.S. Applied Physics (Instrumentation)}
+	\large\rm\expandafter{
+	Kenneth V. Domingo 
+	}\\
+	\large\textit{\expandafter{
+		kdomingo@nip.upd.edu.ph
+	}}\\
+	\textsc{An Undergraduate Thesis Submitted to}\\
+	\textsc{National Institute of Physics}\\
+	\textsc{College of Science}\\
+	\textsc{University of the Philippines} \\
+	\textsc{Diliman, Quezon City}\\
+	\vskip0.25in
+	\rm In Partial Fulfillment of the Requirements\\
+	\rm for the Degree of\\
+	\rm\uppercase\expandafter{Bachelor of Science}
+	\rm\uppercase{in}
+	\rm\uppercase\expandafter{Applied Physics}\\
+	\textsc\expandafter{April 2020}
 }
-\date{\normalsize April 2020}
+
 \maketitle
 \thispagestyle{titlestyle}
 
@@ -50,28 +68,14 @@
 \cleardoublepage
 \pagenumbering{arabic}
 
-\chapter{Introduction}
-\label{chap:intro}
-\input{chapter01}
+\include{chapter01}
+\include{chapter02}
+\include{chapter03}
+\include{chapter04}
+\include{chapter05}
+\include{chapter06}
 
-\chapter{Preliminaries}
-\label{chap:theory}
-\input{chapter02}
-
-\chapter{Two-dimensional compressive sensing (2DCS)}
-\label{chap:2dcs}
-\input{chapter03}
-
-\chapter{One-dimensional compressive sensing (1DCS)}
-\label{chap:1dcs}
-
-\chapter{Generalization to $N$-dimensions}
-\label{chap:ndcs}
-
-\chapter{Conclusions}
-\label{chap:conc}
-
-\bibliographystyle{spp-bst}
+\bibliographystyle{unsrt}
 \bibliography{library,thesis}
 
 \end{document}
