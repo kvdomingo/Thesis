@@ -40,7 +40,7 @@ Image signals are commonly expressed sparsely as a linear superposition of a fin
 
 \section{Image with multiple sinusoids}
 \label{sec:2dmultisin}
-For this section, the image used is M.C. Escher's \textit{Relativity}, an example of a more complex image consisting of various sinusoidal patterns. The original image has dimensions of $1600 \times 981$ pixels, for a total of 1,569,600 pixels. This would require the construction of a 1,569,600 $\times$ 1,569,600 sparsifying matrix, or $\approx 2 \times 10^{12}$ entries. Assuming that the matrix would be stored as 32-bit floating point numbers, this process alone would take up $\approx 8$ GB of RAM, and it would be highly impractical to process similar images as a whole. A workaround is to split it into smaller, manageable patches. For this image in particular, it was first resized to $1600 \times 976$ pixels so that it could be equally divided into a grid of $16 \times 16$ patches, each with a dimension of $100 \times 61$ pixels.
+For this section, the image used is M.C. Escher's \textit{Relativity}, an example of a more complex image consisting of various sinusoidal patterns. The original image has dimensions of $1600 \times 981$ pixels, for a total of 1,569,600 pixels. This would require the construction of a 1,569,600 $\times$ 1,569,600 sparsifying matrix, or $\approx 2 \times 10^{12}$ entries. Assuming that the matrix would be stored as 32-bit floating point numbers, this process alone would take up $\approx 8$ GB of RAM, and it would be highly impractical to process similar images as a whole. A workaround is to split it into smaller, manageable patches. For this image in particular, it was first resized to $1600 \times 976$ pixels so that it could be equally divided into a grid of $16 \times 16$, each with a dimension of $100 \times 61$ pixels. After compressively sensing each patch and stitching all patches at the end, the reconstructed image is shown in Fig. \ref{fig:relativity-recovered}. Selected patches are shown side-by-side with their reconstructed counterparts in Fig. \ref{fig:relativity-dominant-slices}, corresponding to patches dominated by horizontal sinusoids, vertical sinusoids, diagonal sinusoids, and patches with no dominant pattern.
 
 
 \begin{figure}[tb]
@@ -48,3 +48,19 @@ For this section, the image used is M.C. Escher's \textit{Relativity}, an exampl
 	\caption{\textit{Relativity} by M.C. Escher, a complex image consisting of various sinusoidal patterns.}
 	\label{fig:relativity}
 \end{figure}
+
+\begin{figure}[tb]
+	\includegraphics[width=\textwidth]{relativity-slices.png}
+	\caption{Test image divided into a grid of $16 \times 16$.}
+	\label{fig:relativity-slices}
+\end{figure}
+
+
+\section{Simultaneous compression \& encryption}
+Because of the way compressively sensed images are coded with the sensing matrix, the use of CS as an encryption algorithm arises naturally. Consider the logistic map
+
+\begin{equation}\label{eq:logistic-map}
+	x_{n+1} = r x_n \qty(1 - x_n)
+\end{equation}
+
+\noindent which is often used as an archetypal example of deterministic chaotic behavior when $r \in [3.57, 4]$. Within these values, the sequences produced by varying the initial value $x_0$ rapidly diverge from each other. Thus, this can become an encryption system by treating the parameters $r$ and $x_0$ as the encryption keys, and \eqref{eq:logistic-map} as the hash function. 
