@@ -1,58 +1,106 @@
-\chapter{Two-dimensional compressive sensing (2DCS)}
-\label{chap:2dcs}
+\chapter{Image compressive sensing}
+\label{chap:image-cs}
 
-\section{Methodology}
-\label{sec:2dmetho}
-The compressive sensing (CS) of two-dimensional, spatial signals is the more intuitive of its applications as it is easier to visualize. As we will see later on, the CS of image signals can be simplified either by flattening it to one dimension or by patches. The general workflow that arises from image CS is as follows:
+
+One of the more intuitive applications of CS lies in spatial signals as it is easier to visualize. In this scheme, the process can be simplified either by flattening it to one dimension and processing it in its entirety, or maintaining its dimensionality and processing it by patches. The general workflow that arises from image CS is as follows:
 
 \begin{enumerate}
 	\item Define the compression ratio $m/n$, where $n$ is the signal size, and $m$ is the desired size of the compressed signal.
-	\item Draw $m$ random indices from the signal without replacement and store this as a vector $\xi$.
-	\item Extract the row vectors of the desired $n \times n$ sparsifying basis $\bm\Psi$ corresponding to the indices in $\xi$, and stack these to form the sensing matrix $\bm\Phi$.
-	\item With the desired reconstruction algorithm, perform the minimization \eqref{eq:min-l1} to obtain the reconstructed signal $\bm\hat{\vec{x}}$.
+	\item Draw $m$ random indices from the signal without replacement and store this as a sample sequence $\bm\xi$.
+	\item Extract the row vectors of the desired $n \times n$ sparsifying basis $\bm\Psi$ indexed by $\bm\xi$, and stack these to form the sensing matrix $\bm\Phi$ (i.e., $\bm\Phi = \bm\Psi_{\bm\xi}$)
+	\item With the desired reconstruction algorithm, perform the optimization \eqref{eq:min-l1} to obtain the reconstructed signal $\bm\hat{\vec{x}}$.
 \end{enumerate}
 
-In the case of high-definition images, it is usually more practical and yields better results if the image is first divided into smaller, manageable patches and apply the above steps per patch, then stitch the patches back together at the end to form the final reconstructed image.
+In the case of high-definition images (whose shortest side is at least 720 pixels), it is usually more practical and yields better results if the image is processed in patches.
 
 
 \section{Test case: Sinusoidal pattern}
 \label{sec:2dsin}
-Image signals are commonly expressed sparsely as a linear superposition of a finite number of 2D sinusoidal patterns. In Fig. \ref{fig:2dsin}, $64 \times 64$ pixel sinusoidal patterns were generated, corresponding to $\sin(x)$ (sine wave traveling horizontally), $\sin(y)$ (sine wave traveling vertically), $\sin(x+y)$ (sine wave traveling diagonally), and $\sin(x) + \sin(y)$ (egg tray pattern). In each case, all frequency components are 4 Hz. Figure \ref{fig:2dsin-masked} visualizes the compressed image when a random sample of 5\% is taken from the signal. The actual compressed signal that is seen by the reconstruction algorithm is a one-dimensional vector containing the sampling points. For reconstruction, the algorithm used is CVXPY, which casts the minimization problem \ref{eq:min-l1} as a convex optimization problem, and directly minimizes the $\ell_1$ norm \cite{cvxpy,cvxpy_rewriting}. From the 5\% of samples taken from the original image, the reconstructed signals are shown in Fig. \ref{fig:2dsin-recovered}, each of which has a mean-squared error (MSE) of no more than 0.06. Exact reconstruction is attained for the pure horizontal and pure vertical sine waves, as well as the egg tray pattern. Additional artifacts are present in the reconstructed diagonal sine wave, particularly at the boundaries.
+As mentioned in Chapter \ref{chap:theory}, the most commonly used sparse representation domain for images is the Fourier domain, referred to in some fields as $k$-space. In this space, signals are represented as a linear superposition of a finite number of sinusoidal patterns. In Fig. \ref{fig:2dsin}, $64 \times 64$ pixel sinusoidal patterns are generated, corresponding to sine waves traveling horizontally, vertically, and diagonally, as well as an egg tray pattern. In each case, all frequency components are 4 Hz. Figure \ref{fig:2dsin-masked} visualizes the compressed image when a random sample of 5\% is taken from the signal. The actual compressed signal that is seen by the reconstruction algorithm is a one-dimensional sequence containing only the information from the points being sampled. Orthogonal matching pursuit (OMP) was used for reconstruction, which is a greedy algorithm that finds the combination of basis vectors which best represents the signal (similar to matching pursuit), but in addition, the residual at each iteration is recomputed using an orthogonal projection on the set of previously selected basis vectors \cite{Mallat1993}. Its objective function is
+
+\begin{equation}\label{eq:omp}
+	\arg\min_{\vec{x}} \norm{\vec{y} - \bm\Phi \vec{x}}_2^2 \quad \textrm{subject to} \quad \norm{\vec{x}}_0 \leq \gamma
+\end{equation}
+
+\noindent where $\gamma$ is a hyperparameter which controls the maximum allowable number of non-zero coefficients. The Scikit-learn implementation sets this value to 10\% of the number of samples by default \cite{scikit-learn}. Evaluation of the mean-squared error (MSE) for the pure horizontal and pure vertical sine waves, as well as the egg tray pattern yields a value that is practically negligible ($\approx 10^{-31}$); the reconstruction is exact. On the other hand, the reconstructed diagonal sine wave yields an MSE of $10^{-3}$---still quite small, but mild distortion can be observed at the image boundaries. This is due to the fact that the information at hand is finite, and so is the window size which, in this case, is the same size as the signal itself.
 
 \begin{figure}[tb]
-	\includegraphics[width=\textwidth]{2dsin.png}
-	\caption{Test 2D sinusoid patterns.}
-	\label{fig:2dsin}
-\end{figure}
-
-\begin{figure}[tb]
-	\includegraphics[width=\textwidth]{2dsin-masked.png}
-	\caption{Visualization of compressed sinusoid patterns.}
-	\label{fig:2dsin-masked}
-\end{figure}
-
-\begin{figure}[tb]
-	\includegraphics[width=\textwidth]{2dsin-recovered.png}
-	\caption{Reconstructed sinusoid patterns from 5\% of samples from original image.}
-	\label{fig:2dsin-recovered}
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{2dsin.png}
+		\caption{Test 2D sinusoid patterns.}
+		\label{fig:2dsin}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{2dsin-masked.png}
+		\caption{Visualization of sinusoid patterns with compression ratio of 5\%.}
+		\label{fig:2dsin-masked}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{2dsin-recovered.png}
+		\caption{Reconstruction from 5\% of samples.}
+		\label{fig:2dsin-recovered}
+	\end{subfigure}
+	\caption{Test $64 \times 64$ pixel 2D sinusoid patterns corresponding to vertical sinusoids, horizontal sinusoids, diagonal sinusoids, and egg tray pattern. All frequency components are 4 Hz.}
+	\label{fig:test-2dsin}
 \end{figure}
 
 
 \section{Image with multiple sinusoids}
 \label{sec:2dmultisin}
-For this section, the image used is M.C. Escher's \textit{Relativity}, an example of a more complex image consisting of various sinusoidal patterns. The original image has dimensions of $1600 \times 981$ pixels, for a total of 1,569,600 pixels. This would require the construction of a 1,569,600 $\times$ 1,569,600 sparsifying matrix, or $\approx 2 \times 10^{12}$ entries. Assuming that the matrix would be stored as 32-bit floating point numbers, this process alone would take up $\approx 8$ GB of RAM, and it would be highly impractical to process similar images as a whole. A workaround is to split it into smaller, manageable patches. For this image in particular, it was first resized to $1600 \times 976$ pixels so that it could be equally divided into a grid of $16 \times 16$, each with a dimension of $100 \times 61$ pixels. After compressively sensing each patch and stitching all patches at the end, the reconstructed image is shown in Fig. \ref{fig:relativity-recovered}. Selected patches are shown side-by-side with their reconstructed counterparts in Fig. \ref{fig:relativity-dominant-slices}, corresponding to patches dominated by horizontal sinusoids, vertical sinusoids, diagonal sinusoids, and patches with no dominant pattern.
+For this section, the image used is M.C. Escher's \textit{Relativity}, an example of a more complex image but consisting of dominant sinusoidal patterns that are made apparent when you zoom in. The original image has dimensions of $1600 \times 981$ pixels, for a total of 1,569,600 pixels. Following the procedure with the previous section, this would require the construction of a 1,569,600 $\times$ 1,569,600 sparsifying matrix containing $\approx 2 \times 10^{12}$ entries. Assuming that the matrix would be stored as 32-bit floating point numbers, this process alone would take up $\approx 8$ GB of memory, and it would be highly impractical to process similarly-sized images as a whole. The workaround is to split it into smaller, manageable patches. For this image in particular, it was first resized to $1600 \times 976$ pixels so that it could be equally divided into a grid of $16 \times 16$, each with a dimension of $100 \times 61$ pixels. After compressively sampling each patch at 40\% compression ratio, reconstruction was performed using the Embedded Conic Solver (ECOS) of the Convex Optimization Python library (CVXPY), which recasts \eqref{eq:min-l1} as a convex problem and directly minimizes the $\ell_1$ norm \cite{ecos,cvxpy,cvxpy_rewriting} and thus, is significantly slower compared to OMP. After stitching all patches at the end, the reconstructed image is shown in Fig. \ref{fig:relativity-recovered}. Selected patches with the aforementioned dominant patterns are shown with their reconstructed counterparts in Fig. \ref{fig:relativity-dominant-slices}, corresponding to patches dominated by horizontal sinusoids, vertical sinusoids, diagonal sinusoids, multiple sinusoids, and patches with no dominant pattern. We can observe that at this compression rate, the patches with a single apparent sinusoidal pattern (Figs. \ref{fig:relativity-vert40}-\ref{fig:relativity-diag40}) are successfully recovered, with some noise present especially for the patch with a dominant diagonal pattern (similar to the previous section). The patch with multiple sinusoid patterns (Fig. \ref{fig:relativity-mult40}), although still recognizable, is laden with a lot of noise. Lastly, the patch with no apparent pattern (Fig. \ref{fig:relativity-high40}) is barely recognizable, except for the portions where a dominant sinusoidal pattern is partially present in the frame.
 
+From this, the following information can be gleaned. First, reconstruction performs better on smaller patches, and when the patch in question contains as few frequency components as possible (such is the case with the patches with only one dominant pattern). Second, the patch with no dominant pattern---upon closer visual inspection---can be classified as being successfully recovered; however, the reconstruction noise is almost at the same level as the signal itself, which makes them indistinguishable. This can be attributed to the fact that the patches with no apparent dominant pattern are actually composed of a superposition of sinusoids residing primarily in the high-frequency region of $k$-space. Since the sampling points are uniformly distributed throughout the spatial domain, so are they in the frequency domain. Thus, the information in the high-frequency region is not sufficiently captured, and a higher compression ratio is required to be able to better recover these high-frequency regions. Another solution would be, as mentioned earlier, to make the patches smaller so that lesser frequencies are captured in one patch.
 
-\begin{figure}[tb]
+\begin{figure}[htb]
 	\includegraphics[width=\textwidth]{relativity.jpg}
 	\caption{\textit{Relativity} by M.C. Escher, a complex image consisting of various sinusoidal patterns.}
 	\label{fig:relativity}
 \end{figure}
 
-\begin{figure}[tb]
-	\includegraphics[width=\textwidth]{relativity-slices.png}
-	\caption{Test image divided into a grid of $16 \times 16$.}
-	\label{fig:relativity-slices}
+\begin{figure}[htb]
+	\includegraphics[width=\textwidth]{relativity-recovered.png}
+	\caption{Reconstructed \textit{Relativity} from 50\% of samples from each patch.}
+	\label{fig:relativity-recovered}
+\end{figure}
+
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{relativity-vert40.png}
+		\caption{Dominant vertical}
+		\label{fig:relativity-vert40}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{relativity-horiz40.png}
+		\caption{Dominant horizontal}
+		\label{fig:relativity-horiz40}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{relativity-diag40.png}
+		\caption{Dominant diagonal}
+		\label{fig:relativity-diag40}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{relativity-mult40.png}
+		\caption{Multiple dominant sinusoids}
+		\label{fig:relativity-mult40}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{relativity-high40.png}
+		\caption{No dominant pattern}
+		\label{fig:relativity-high40}
+	\end{subfigure}
+	\caption{Extracted and reconstructed patches from \textit{Relativity} using 40\% of samples.}
+	\label{fig:relativity-dominant-slices}
 \end{figure}
 
 
@@ -63,4 +111,28 @@ Because of the way compressively sensed images are coded with the sensing matrix
 	x_{n+1} = r x_n \qty(1 - x_n)
 \end{equation}
 
-\noindent which is often used as an archetypal example of deterministic chaotic behavior when $r \in [3.57, 4]$. Within these values, the sequences produced by varying the initial value $x_0$ rapidly diverge from each other. Thus, this can become an encryption system by treating the parameters $r$ and $x_0$ as the encryption keys, and \eqref{eq:logistic-map} as the hash function. 
+\noindent which is often used as an archetypal example of deterministic chaotic behavior for values of $r \in [3.57, 4]$. In this regime, the sequences produced by varying the initial parameter $x_0$ rapidly diverge from each other. Thus, this can become an encryption system by treating the parameters $r$ and $x_0$ as an encryption key pair, and \eqref{eq:logistic-map} as the hash function.
+
+In application for images, four keys are required: one key pair for each dimension. The construction of the sensing matrix $\bm\Phi$ also differs from the general workflow, and is as follows:
+
+\begin{enumerate}
+	\item From \eqref{eq:logistic-map}, generate a sequence of length $2m$ with the initial key pair $r_1$ and $x_{01}$. Discard the first $n$ elements to avoid the transient response and store the latter $n$ elements as a sequence $\vec{s}$.
+	\item Explicitly generate the index sequence of $\vec{s}$ and store it as the index sequence $\vec{p} = \qty[0, 1, ..., m-1]$.
+	\item Sort $\vec{p}$ according to ascending values of $\vec{s}$.
+	\item Generate the first sensing matrix $\bm\Phi_1$ by extracting and stacking rows of a Hadamard matrix of order $N$ indexed by the first $m$ elements of $\vec{p}$, i.e.,
+	\begin{equation}\label{eq:construct-hadamard}
+		\bm\Phi_1 = \mqty[
+			\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_M}
+		]^\top
+	\end{equation}
+	\noindent where $\vec{H}_{p_i}$ denotes the $p_i$th row vector of $\vec{H}$.
+	\item The second sensing matrix can be constructed using a different key pair $r_2$ and $x_{02}$.
+\end{enumerate}
+
+The above steps imply that the image must first be reshaped to have dimensions that are powers of 2. The original image is first reshaped to $256 \times 256$ pixels, and is sparsified by transforming it to the discrete cosine transform (DCT) domain. The desired compressed dimension is set to $m = 192$, corresponding to a compression ratio $m/n = 75\%$, and the keys are set to values of $r_1 = r_2 = 3.99$, $x_{01} = 0.11$, and $x_{02} = 0.24$. Figure \ref{fig:encryption} shows the application of this to the Lena test image (left), its encrypted representation (middle), and the decrypted/reconstructed image (right).
+
+\begin{figure}[htb]
+	\includegraphics[width=\textwidth]{encryption.png}
+	\caption{Simultaneous compression and encryption achieved with compressive sensing: original image (left), encrypted image (middle), and decrypted/reconstructed image (right).}
+	\label{fig:encryption}
+\end{figure}
