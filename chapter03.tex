@@ -122,17 +122,25 @@ In application for images, four keys are required: one key pair for each dimensi
 	\item Generate the first sensing matrix $\bm\Phi_1$ by extracting and stacking rows of a Hadamard matrix of order $N$ indexed by the first $m$ elements of $\vec{p}$, i.e.,
 	\begin{equation}\label{eq:construct-hadamard}
 		\bm\Phi_1 = \mqty[
-			\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_M}
+			\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_m}
 		]^\top
 	\end{equation}
 	\noindent where $\vec{H}_{p_i}$ denotes the $p_i$th row vector of $\vec{H}$.
 	\item The second sensing matrix can be constructed using a different key pair $r_2$ and $x_{02}$.
 \end{enumerate}
 
-The above steps imply that the image must first be reshaped to have dimensions that are powers of 2. The original image is first reshaped to $256 \times 256$ pixels, and is sparsified by transforming it to the discrete cosine transform (DCT) domain. The desired compressed dimension is set to $m = 192$, corresponding to a compression ratio $m/n = 75\%$, and the keys are set to values of $r_1 = r_2 = 3.99$, $x_{01} = 0.11$, and $x_{02} = 0.24$. Figure \ref{fig:encryption} shows the application of this to the Lena test image (left), its encrypted representation (middle), and the decrypted/reconstructed image (right).
+The above steps imply that the image must first be reshaped to have dimensions that are integer multiples of 4. The original image is first reshaped to $256 \times 256$ pixels, and is sparsified by transforming it to the discrete cosine transform (DCT) domain. The desired compressed dimension is set to $m = 192$, corresponding to a compression ratio $m/n = 75\%$, and the keys are set to values of $r_1 = r_2 = 3.99$, $x_{01} = 0.11$, and $x_{02} = 0.24$. Figure \ref{fig:encryption} shows the application of this to the Lena test image (left), its encrypted representation (middle), and the decrypted/reconstructed image (right). Visual inspection of the encrypted representation shows horizontal and vertical bands distributed throughout the representation space, and is indicative that a simple inverse Fourier transform will not recover any meaningful information. Assuming that the receiver knows the encryption scheme, recovery of the original message is successful if the same keys $r_1, r_2, x_{01}, x_{02}$ as the encryption stage are used, which will allow the receiver to construct the exact same sensing matrices $\bm\Phi_1, \bm\Phi_2$ and perform the inverse operation on the encrypted message. In the decrypted image, encryption artifacts can be observed, as indicated by some visible banding, but is nonetheless recognizable; evaluation of the MSE yields a value of 0.02.
 
 \begin{figure}[htb]
 	\includegraphics[width=\textwidth]{encryption.png}
 	\caption{Simultaneous compression and encryption achieved with compressive sensing: original image (left), encrypted image (middle), and decrypted/reconstructed image (right).}
 	\label{fig:encryption}
+\end{figure}
+
+With the knowledge that the hash function $\eqref{eq:logistic-map}$ is chaotic, the encryption strength of the system can be tested by slightly perturbing the initial values. Figure \ref{fig:wrong-decryption} shows the decryption results when all the correct keys are used, except for $x_{01}$, which is perturbed by a tiny value $\approx 10^{-15}$ (third image), and similarly when the correct $x_{01}$ is used but $x_{02}$ is perturbed by the same amount (last image). This shows that the encryption scheme is highly robust against brute force attacks. Additionally, Fig. \ref{fig:perturb-mse} shows the MSE curves for differing values of the perturbation $\Delta x_{01}$ and $\Delta x_{02}$. The MSE is generally flat for perturbations on the degree of $10^{-14}$, and exhibits a sharp dip when the MSE is evaluated for the correct keys ($\Delta x_0 = 0$).
+
+\begin{figure}[htb]
+	\includegraphics[width=\textwidth]{wrong_decrypt.png}
+	\caption{Test image Lena (first) with the encrypted representation (second), the decryption result when the correct keys are used but $x_{01}$ is perturbed by a value of $10^{-15}$ (third), and the decryption result when the correct keys are used but $x_{02}$ is perturbed by a value of $10^{-15}$.}
+	\label{fig:wrong-decryption}
 \end{figure}
