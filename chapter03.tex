@@ -137,10 +137,28 @@ The above steps imply that the image must first be reshaped to have dimensions t
 	\label{fig:encryption}
 \end{figure}
 
-With the knowledge that the hash function $\eqref{eq:logistic-map}$ is chaotic, the encryption strength of the system can be tested by slightly perturbing the initial values. Figure \ref{fig:wrong-decryption} shows the decryption results when all the correct keys are used, except for $x_{01}$, which is perturbed by a tiny value $\approx 10^{-15}$ (third image), and similarly when the correct $x_{01}$ is used but $x_{02}$ is perturbed by the same amount (last image). This shows that the encryption scheme is highly robust against brute force attacks. Additionally, Fig. \ref{fig:perturb-mse} shows the MSE curves for differing values of the perturbation $\Delta x_{01}$ and $\Delta x_{02}$. The MSE is generally flat for perturbations on the degree of $10^{-14}$, and exhibits a sharp dip when the MSE is evaluated for the correct keys ($\Delta x_0 = 0$).
+With the knowledge that the hash function $\eqref{eq:logistic-map}$ is chaotic, the encryption strength of the system can be tested by slightly perturbing the initial values. Figure \ref{fig:wrong-decryption} shows the decryption results when all the correct keys are used, except for $x_{01}$, which is perturbed by a tiny value $\approx 10^{-15}$ (third image), and similarly when the correct $x_{01}$ is used but $x_{02}$ is perturbed by the same amount (last image). Additionally, Fig. \ref{fig:perturb-mse} shows the MSE curves for differing values of the perturbation $\Delta x_{01}$ and $\Delta x_{02}$. The MSE generally oscillates at some high value for perturbations on the degree of $10^{-14}$, and exhibits a sharp dip when the MSE is evaluated for the correct keys ($\Delta x_0 = 0$). This shows that brute force attacks are intractable against this kind of encryption system.
 
 \begin{figure}[htb]
 	\includegraphics[width=\textwidth]{wrong_decrypt.png}
 	\caption{Test image Lena (first) with the encrypted representation (second), the decryption result when the correct keys are used but $x_{01}$ is perturbed by a value of $10^{-15}$ (third), and the decryption result when the correct keys are used but $x_{02}$ is perturbed by a value of $10^{-15}$.}
 	\label{fig:wrong-decryption}
+\end{figure}
+
+\begin{figure}[tb]
+	\centering
+	\begin{subfigure}{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{mse-x01.png}
+		\caption{Perturbation of $\Delta x_{01}$}
+		\label{fig:perturb-mse-x01}
+	\end{subfigure} 
+	\begin{subfigure}{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{mse-x02.png}
+		\caption{Perturbation of $\Delta x_{02}$}
+		\label{fig:perturb-mse-x02}
+	\end{subfigure}
+	\caption{MSE curves resulting from evaluation of reconstruction error for tiny perturbations in the initial values $\Delta x_{01}$ and $\Delta x_{02}$.}
+	\label{fig:perturb-mse}
 \end{figure}
