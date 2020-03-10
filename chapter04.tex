@@ -1,2 +1,14 @@
 \chapter{Audio compressive sensing}
 \label{chap:audio-cs}
+
+Audio signals are a tad harder to compressively sample; it is in these types of signals that the Nyquist-Shannon sampling theorem (NST) is highly observed. In this chapter, I consider only short signals with a few number of known frequency components. The CS workflow, in principle, is identical to the previous chapter as the signals are still relatively non-intensive on memory, and the frequency content does not vary appreciably, if at all, through time.
+
+\section{Test case: Sinusoid redux}
+\label{sec:1dsin}
+Once again, the Fourier domain is used as the sparse representation for the signals of interest. A C$_5$ piano note (523 Hz)---corresponding to a Nyquist rate of 1046 Hz---was synthesized using Guitar Pro, with a sampling rate of 44.1 kHz and a duration of 1 second. Due to the number of samples, only the first $\frac{1}{8}$th second was taken, corresponding to 5512 samples. This portion was then compressively sampled 300 random measurements, equivalent to a 5\% compression ratio.
+
+\section{Sinusoid with anharmonic frequencies}
+
+\section{Multiple sinusoids}
+
+\section{Effect of random sample distribution on reconstruction error}
