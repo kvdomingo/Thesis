@@ -8,6 +8,7 @@
 \usepackage{lipsum}
 \usepackage{titlesec}
 \usepackage{microtype}
+\usepackage{appendix}
 \usepackage[all]{nowidow}
 \usepackage{bm}
 \renewcommand{\vec}[1]{\text{\bfseries #1}}
@@ -75,7 +76,10 @@
 \include{chapter05}
 \include{chapter06}
 
-\bibliographystyle{unsrt}
+\appendix
+\include{appendix}
+
+\bibliographystyle{spp-bst}
 \bibliography{library,thesis}
 
 \end{document}

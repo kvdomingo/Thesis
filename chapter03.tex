@@ -1,164 +1,128 @@
-\chapter{Image compressive sensing}
-\label{chap:image-cs}
+\chapter{Random sampling-based compressive sensing}
+\label{chap:audio-cs}
+
+In this chapter, I lay out the groundwork for performing basic compressive sensing techniques which will be repeatedly used and built upon in the following chapters. I also investigate various random properties that take place in the construction of sensing matrices and their potential effect on the reconstruction quality. In order to quantify these properties, I focus primarily on one-dimensional sinusoids, better visualized as audio. In particular, these are signals containing a few known frequency components that do not vary appreciably, if at all, through time.
+
+\section{Test case: Sinusoid}
+\label{sec:1dsin}
+For the signals of interest, I use the Fourier domain as the sparse representation. I synthesized a C$_5$ piano note (523 Hz)---corresponding to a Nyquist rate of 1046 Hz---using Guitar Pro, with the standard sampling rate of 44.1 kHz and a duration of 1~second. Due to the number of samples, I only worked with the first 1/8th second, corresponding to 5512 samples. This will be the original signal; let's call this signal $\vec{x}$. I then compressively sampled this portion by taking 300 uniformly distributed random measurements, equivalent to a 5\% compression ratio; this will be our compressed vector $\vec{y}$. Figure~\ref{fig:random-sampling} visualizes how these measurements are distributed in time.
+
+\begin{figure}[htb]
+	\includegraphics[width=\textwidth]{random_sampling.png}
+	\caption{Original test signal (blue) and random measurements (orange).}
+	\label{fig:random-sampling}
+\end{figure}
+
+In this model, sampling points consist of a discrete set of indices containing the signal amplitude corresponding to an instantaneous point in time. The random measurements actually point to these indices, which subset the chosen sparsifying basis: in this case, the DCT domain, for simplicity. The same random indices are used to select the rows of the DCT matrix of shape $n \times n$, where $n$ is the signal dimension. I then stack these rows to form the sensing matrix $\vec{A}$; essentially a partial DCT matrix of shape $m \times n$, where $m$ is the number of random measurements. Essentially, I am simulating a sensing device that not only purposely undersamples, but also samples at random, intermittent points in time.
+
+In Chapter \ref{chap:theory}, I discussed an overview of popular algorithms used in CS. For the purposes of comparison in this chapter, I will be focusing on a gradient-based method (LASSO), and a convex optimization-based method (CVXPY). The optimization objectives for these two become
+
+\begin{align}
+	\mathrm{LASSO}:& \quad \min_{\bm\hat{\vec{x}}} \frac{1}{2m} \norm{\vec{y} - \vec{A}\bm\hat{\vec{x}}}_2^2 + \alpha \norm{\bm\hat{\vec{x}}}_1 \label{eq:random-lasso-objective} \\
+	\mathrm{CVXPY}:& \quad \min_{\bm\hat{\vec{x}}} \norm{\bm\hat{\vec{x}}}_1 \quad \textrm{subject to} \quad \vec{A}\bm\hat{\vec{x}} = \vec{y} \label{eq:random-cvxpy-objective}
+\end{align}
+
+where $\bm\hat{\vec{x}}$ is the candidate solution, and the optimum value of $\alpha$ was automatically determined via 10-fold cross validation. A detailed implementation is shown in Appendix \ref{appendix:codes}. Figure~\ref{fig:random-compare-algorithms} shows a comparison of the original signal with the reconstructions from the two algorithms in the time and frequency domains. In the time domain, both algorithms appear to have been able to successfully reconstruct the signal, though the CVXPY recovery shows many artifacts. The LASSO algorithm yields a mean-squared error (MSE) of 0.002, while CVXPY yields an MSE of 0.074. In the frequency domain, however, many frequencies are erroneously being recovered by the LASSO method, and more so with the CVXPY method. Because LASSO's $\alpha$ is a hyperparameter, it will need additional tuning to yield a more optimal value.
+
+\begin{figure}[htb]
+	\includegraphics[width=\textwidth]{reconstruction_methods.png}
+	\caption{Original signal (leftmost), LASSO reconstruction (middle), and CVXPY reconstruction (rightmost). The top row shows the time domain representation, while the bottom row shows the frequency domain representation.}
+	\label{fig:random-compare-algorithms}
+\end{figure}
 
 
-One of the more intuitive applications of CS lies in spatial signals as it is easier to visualize. In this scheme, the process can be simplified either by flattening it to one dimension and processing it in its entirety, or maintaining its dimensionality and processing it by patches. The general workflow that arises from image CS is as follows:
+\section{Effect of random sample distribution on reconstruction error}
+So far, I have worked solely with uniformly-distributed random sampling. Here, I investigate and compare the quality of reconstruction (in MSE) in terms of the random distribution. I will be working with two common distributions: the Gaussian and Poisson distributions, as well as the triangular distribution, which is commonly used in audio and image dithering. For each distribution, I generate i.i.d.~random variables and use these to compressively sample the signal. I then evaluate the reconstruction MSE and take the average over 10 iterations to obtain error bars.
 
-\begin{enumerate}
-	\item Define the compression ratio $m/n$, where $n$ is the signal size, and $m$ is the desired size of the compressed signal.
-	\item Draw $m$ random indices from the signal without replacement and store this as a sample sequence $\bm\xi$.
-	\item Extract the row vectors of the desired $n \times n$ sparsifying basis $\bm\Psi$ indexed by $\bm\xi$, and stack these to form the sensing matrix $\bm\Phi$ (i.e., $\bm\Phi = \bm\Psi_{\bm\xi}$)
-	\item With the desired reconstruction algorithm, perform the optimization \eqref{eq:min-l1} to obtain the reconstructed signal $\bm\hat{\vec{x}}$.
-\end{enumerate}
+The Gaussian/normal distribution can be generated by
 
-In the case of high-definition images (whose shortest side is at least 720 pixels), it is usually more practical and yields better results if the image is processed in patches.
-
-
-\section{Test case: Sinusoidal pattern}
-\label{sec:2dsin}
-As mentioned in Chapter \ref{chap:theory}, the most commonly used sparse representation domain for images is the Fourier domain, referred to in some fields as $k$-space. In this space, signals are represented as a linear superposition of a finite number of sinusoidal patterns. In Fig. \ref{fig:2dsin}, $64 \times 64$ pixel sinusoidal patterns are generated, corresponding to sine waves traveling horizontally, vertically, and diagonally, as well as an egg tray pattern. In each case, all frequency components are 4 Hz. Figure \ref{fig:2dsin-masked} visualizes the compressed image when a random sample of 5\% is taken from the signal. The actual compressed signal that is seen by the reconstruction algorithm is a one-dimensional sequence containing only the information from the points being sampled. Orthogonal matching pursuit (OMP) was used for reconstruction, which is a greedy algorithm that finds the combination of basis vectors which best represents the signal (similar to matching pursuit), but in addition, the residual at each iteration is recomputed using an orthogonal projection on the set of previously selected basis vectors \cite{Mallat1993}. Its objective function is
-
-\begin{equation}\label{eq:omp}
-	\arg\min_{\vec{x}} \norm{\vec{y} - \bm\Phi \vec{x}}_2^2 \quad \textrm{subject to} \quad \norm{\vec{x}}_0 \leq \gamma
+\begin{equation}
+	\label{eq:random-gaussian}
+	G(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp[-\frac{(x - \mu)^2}{2\sigma^2}]
 \end{equation}
 
-\noindent where $\gamma$ is a hyperparameter which controls the maximum allowable number of non-zero coefficients. The Scikit-learn implementation sets this value to 10\% of the number of samples by default \cite{scikit-learn}. Evaluation of the mean-squared error (MSE) for the pure horizontal and pure vertical sine waves, as well as the egg tray pattern yields a value that is practically negligible ($\approx 10^{-31}$); the reconstruction is exact. On the other hand, the reconstructed diagonal sine wave yields an MSE of $10^{-3}$---still quite small, but mild distortion can be observed at the image boundaries. This is due to the fact that the information at hand is finite, and so is the window size which, in this case, is the same size as the signal itself.
+\noindent where the parameters $\mu$ \& $\sigma$ are the distribution's mean and standard deviation, respectively. The Poisson distribution can be generated by
 
-\begin{figure}[tb]
-	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{2dsin.png}
-		\caption{Test 2D sinusoid patterns.}
-		\label{fig:2dsin}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{2dsin-masked.png}
-		\caption{Visualization of sinusoid patterns with compression ratio of 5\%.}
-		\label{fig:2dsin-masked}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{2dsin-recovered.png}
-		\caption{Reconstruction from 5\% of samples.}
-		\label{fig:2dsin-recovered}
-	\end{subfigure}
-	\caption{Test $64 \times 64$ pixel 2D sinusoid patterns corresponding to vertical sinusoids, horizontal sinusoids, diagonal sinusoids, and egg tray pattern. All frequency components are 4 Hz.}
-	\label{fig:test-2dsin}
-\end{figure}
-
-
-\section{Image with multiple sinusoids}
-\label{sec:2dmultisin}
-For this section, the image used is M.C. Escher's \textit{Relativity}, an example of a more complex image but consisting of dominant sinusoidal patterns that are made apparent when you zoom in. The original image has dimensions of $1600 \times 981$ pixels, for a total of 1,569,600 pixels. Following the procedure with the previous section, this would require the construction of a 1,569,600 $\times$ 1,569,600 sparsifying matrix containing $\approx 2 \times 10^{12}$ entries. Assuming that the matrix would be stored as 32-bit floating point numbers, this process alone would take up $\approx 8$ GB of memory, and it would be highly impractical to process similarly-sized images as a whole. The workaround is to split it into smaller, manageable patches. For this image in particular, it was first resized to $1600 \times 976$ pixels so that it could be equally divided into a grid of $16 \times 16$, each with a dimension of $100 \times 61$ pixels. After compressively sampling each patch at 40\% compression ratio, reconstruction was performed using the Embedded Conic Solver (ECOS) of the Convex Optimization Python library (CVXPY), which recasts \eqref{eq:min-l1} as a convex problem and directly minimizes the $\ell_1$ norm \cite{ecos,cvxpy,cvxpy_rewriting} and thus, is significantly slower compared to OMP. After stitching all patches at the end, the reconstructed image is shown in Fig. \ref{fig:relativity-recovered}. Selected patches with the aforementioned dominant patterns are shown with their reconstructed counterparts in Fig. \ref{fig:relativity-dominant-slices}, corresponding to patches dominated by horizontal sinusoids, vertical sinusoids, diagonal sinusoids, multiple sinusoids, and patches with no dominant pattern. We can observe that at this compression rate, the patches with a single apparent sinusoidal pattern (Figs. \ref{fig:relativity-vert40}-\ref{fig:relativity-diag40}) are successfully recovered, with some noise present especially for the patch with a dominant diagonal pattern (similar to the previous section). The patch with multiple sinusoid patterns (Fig. \ref{fig:relativity-mult40}), although still recognizable, is laden with a lot of noise. Lastly, the patch with no apparent pattern (Fig. \ref{fig:relativity-high40}) is barely recognizable, except for the portions where a dominant sinusoidal pattern is partially present in the frame.
-
-From this, the following information can be gleaned. First, reconstruction performs better on smaller patches, and when the patch in question contains as few frequency components as possible (such is the case with the patches with only one dominant pattern). Second, the patch with no dominant pattern---upon closer visual inspection---can be classified as being successfully recovered; however, the reconstruction noise is almost at the same level as the signal itself, which makes them indistinguishable. This can be attributed to the fact that the patches with no apparent dominant pattern are actually composed of a superposition of sinusoids residing primarily in the high-frequency region of $k$-space. Since the sampling points are uniformly distributed throughout the spatial domain, so are they in the frequency domain. Thus, the information in the high-frequency region is not sufficiently captured, and a higher compression ratio is required to be able to better recover these high-frequency regions. Another solution would be, as mentioned earlier, to make the patches smaller so that lesser frequencies are captured in one patch.
-
-\begin{figure}[htb]
-	\includegraphics[width=\textwidth]{relativity.jpg}
-	\caption{\textit{Relativity} by M.C. Escher, a complex image consisting of various sinusoidal patterns.}
-	\label{fig:relativity}
-\end{figure}
-
-\begin{figure}[htb]
-	\includegraphics[width=\textwidth]{relativity-recovered.png}
-	\caption{Reconstructed \textit{Relativity} from 50\% of samples from each patch.}
-	\label{fig:relativity-recovered}
-\end{figure}
-
-\begin{figure}[htb]
-	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{relativity-vert40.png}
-		\caption{Dominant vertical}
-		\label{fig:relativity-vert40}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{relativity-horiz40.png}
-		\caption{Dominant horizontal}
-		\label{fig:relativity-horiz40}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{relativity-diag40.png}
-		\caption{Dominant diagonal}
-		\label{fig:relativity-diag40}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{relativity-mult40.png}
-		\caption{Multiple dominant sinusoids}
-		\label{fig:relativity-mult40}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{relativity-high40.png}
-		\caption{No dominant pattern}
-		\label{fig:relativity-high40}
-	\end{subfigure}
-	\caption{Extracted and reconstructed patches from \textit{Relativity} using 40\% of samples.}
-	\label{fig:relativity-dominant-slices}
-\end{figure}
-
-
-\section{Simultaneous compression \& encryption}
-Because of the way compressively sensed images are coded with the sensing matrix, the use of CS as an encryption algorithm arises naturally. Consider the logistic map
-
-\begin{equation}\label{eq:logistic-map}
-	x_{n+1} = r x_n \qty(1 - x_n)
+\begin{equation}
+	\label{eq:random-poisson}
+	P(x) = \frac{\lambda^x e^{-\lambda}}{x!}
 \end{equation}
 
-\noindent which is often used as an archetypal example of deterministic chaotic behavior for values of $r \in [3.57, 4]$. In this regime, the sequences produced by varying the initial parameter $x_0$ rapidly diverge from each other. Thus, this can become an encryption system by treating the parameters $r$ and $x_0$ as an encryption key pair, and \eqref{eq:logistic-map} as the hash function.
+\noindent where the parameter $\lambda: \lambda > 0$ is the distribution's mean and variance. The triangular distribution is generated by
 
-In application for images, four keys are required: one key pair for each dimension. The construction of the sensing matrix $\bm\Phi$ also differs from the general workflow, and is as follows:
+\begin{equation}
+	\label{eq:random-triangular}
+	T(x) = \begin{cases}
+		0 & x < a, \\
+		\frac{2(x-a)}{(b - a)(c - a)} & a \leq x < c, \\
+		\frac{2}{b - a} & x = c, \\
+		\frac{2(b - x)}{(b - a)(b - c)} & c < x \leq b, \\
+		0 & x > b
+	\end{cases}
+\end{equation}
 
-\begin{enumerate}
-	\item From \eqref{eq:logistic-map}, generate a sequence of length $2m$ with the initial key pair $r_1$ and $x_{01}$. Discard the first $n$ elements to avoid the transient response and store the latter $n$ elements as a sequence $\vec{s}$.
-	\item Explicitly generate the index sequence of $\vec{s}$ and store it as the index sequence $\vec{p} = \qty[0, 1, ..., m-1]$.
-	\item Sort $\vec{p}$ according to ascending values of $\vec{s}$.
-	\item Generate the first sensing matrix $\bm\Phi_1$ by extracting and stacking rows of a Hadamard matrix of order $N$ indexed by the first $m$ elements of $\vec{p}$, i.e.,
-	\begin{equation}\label{eq:construct-hadamard}
-		\bm\Phi_1 = \mqty[
-			\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_m}
-		]^\top
-	\end{equation}
-	\noindent where $\vec{H}_{p_i}$ denotes the $p_i$th row vector of $\vec{H}$.
-	\item The second sensing matrix can be constructed using a different key pair $r_2$ and $x_{02}$.
-\end{enumerate}
-
-The above steps imply that the image must first be reshaped to have dimensions that are integer multiples of 4. The original image is first reshaped to $256 \times 256$ pixels, and is sparsified by transforming it to the discrete cosine transform (DCT) domain. The desired compressed dimension is set to $m = 192$, corresponding to a compression ratio $m/n = 75\%$, and the keys are set to values of $r_1 = r_2 = 3.99$, $x_{01} = 0.11$, and $x_{02} = 0.24$. Figure \ref{fig:encryption} shows the application of this to the Lena test image (left), its encrypted representation (middle), and the decrypted/reconstructed image (right). Visual inspection of the encrypted representation shows horizontal and vertical bands distributed throughout the representation space, and is indicative that a simple inverse Fourier transform will not recover any meaningful information. Assuming that the receiver knows the encryption scheme, recovery of the original message is successful if the same keys $r_1, r_2, x_{01}, x_{02}$ as the encryption stage are used, which will allow the receiver to construct the exact same sensing matrices $\bm\Phi_1, \bm\Phi_2$ and perform the inverse operation on the encrypted message. In the decrypted image, encryption artifacts can be observed, as indicated by some visible banding, but is nonetheless recognizable; evaluation of the MSE yields a value of 0.02.
+\noindent where $a: a \in (-\infty, +\infty)$ is the lower bound, $b: b > a$ is the upper bound, and $c: a \leq c \leq b$ is the mode. Due to the computational requirements, I will only work with the first 1/32 seconds of the signal, corresponding to 1378 samples. Figure~\ref{fig:random-pdf} shows the probability density for each distribution.
 
 \begin{figure}[htb]
-	\includegraphics[width=\textwidth]{encryption.png}
-	\caption{Simultaneous compression and encryption achieved with compressive sensing: original image (left), encrypted image (middle), and decrypted/reconstructed image (right).}
-	\label{fig:encryption}
-\end{figure}
-
-With the knowledge that the hash function $\eqref{eq:logistic-map}$ is chaotic, the encryption strength of the system can be tested by slightly perturbing the initial values. Figure \ref{fig:wrong-decryption} shows the decryption results when all the correct keys are used, except for $x_{01}$, which is perturbed by a tiny value $\approx 10^{-15}$ (third image), and similarly when the correct $x_{01}$ is used but $x_{02}$ is perturbed by the same amount (last image). Additionally, Fig. \ref{fig:perturb-mse} shows the MSE curves for differing values of the perturbation $\Delta x_{01}$ and $\Delta x_{02}$. The MSE generally oscillates at some high value for perturbations on the degree of $10^{-14}$, and exhibits a sharp dip when the MSE is evaluated for the correct keys ($\Delta x_0 = 0$). This shows that brute force attacks are intractable against this kind of encryption system.
-
-\begin{figure}[htb]
-	\includegraphics[width=\textwidth]{wrong_decrypt.png}
-	\caption{Test image Lena (first) with the encrypted representation (second), the decryption result when the correct keys are used but $x_{01}$ is perturbed by a value of $10^{-15}$ (third), and the decryption result when the correct keys are used but $x_{02}$ is perturbed by a value of $10^{-15}$.}
-	\label{fig:wrong-decryption}
-\end{figure}
-
-\begin{figure}[tb]
 	\centering
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}[h!]{0.49\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{mse-x01.png}
-		\caption{Perturbation of $\Delta x_{01}$}
-		\label{fig:perturb-mse-x01}
-	\end{subfigure} 
-	\begin{subfigure}{0.49\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{mse-x02.png}
-		\caption{Perturbation of $\Delta x_{02}$}
-		\label{fig:perturb-mse-x02}
+		\includegraphics[width=\textwidth]{uniform_random.png}
+		\caption{Uniform}
+		\label{fig:random-pdf-uniform}
 	\end{subfigure}
-	\caption{MSE curves resulting from evaluation of reconstruction error for tiny perturbations in the initial values $\Delta x_{01}$ and $\Delta x_{02}$.}
-	\label{fig:perturb-mse}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{gaussian_random.png}
+		\caption{Gaussian ($\mu = n/2$, $\sigma = 100$)}
+		\label{fig:random-pdf-gaussian}
+	\end{subfigure}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{poisson_random.png}
+		\caption{Poisson ($\lambda = n/2$)}
+		\label{fig:random-pdf-poisson}
+	\end{subfigure}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{triangular_random.png}
+		\caption{Triangular ($a = 0$, $b = n/2$, $c = n$)}
+		\label{fig:random-pdf-triangular}
+	\end{subfigure}
+	\caption{Probability densities of the different random distributions used in this section, corresponding to the signal indices.}
+	\label{fig:random-pdf}
 \end{figure}
+
+Figure~\ref{fig:random-mse} shows the MSE evaluated for each random distribution as a function of the fraction of total samples, more aptly referred to as the compression ratio. From this, we can observe that the uniform and triangular distributions give the lowest reconstruction error, but the latter has a more consistent performance across a wide range of compression ratios. They are followed, in order, by the Poisson and Gaussian distributions. One reason for the former's performance is that they are able to completely span the signal with appreciable probability near the bounds, while the latter's probability near the bounds are quickly approaching zero.
+
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{uniform_mse.png}
+		\caption{Uniform}
+		\label{fig:random-mse-uniform}
+	\end{subfigure}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{gaussian_mse.png}
+		\caption{Gaussian ($\mu = n/2$, $\sigma = 100$)}
+		\label{fig:random-mse-gaussian}
+	\end{subfigure}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{poisson_mse.png}
+		\caption{Poisson ($\lambda = n/2$)}
+		\label{fig:random-mse-poisson}
+	\end{subfigure}
+	\begin{subfigure}[h!]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{triangular_mse.png}
+		\caption{Triangular ($a = 0$, $b = n/2$, $c = n$)}
+		\label{fig:random-mse-triangular}
+	\end{subfigure}
+	\caption{Evaluated MSE for each random distribution as a function of compression ratio, average over 10 iterations.}
+	\label{fig:random-mse}
+\end{figure}
+
+In line with these findings, I will be using uniformly-distributed random variables throughout this study unless otherwise stated. In a later chapters, I will be exploring more on recovering exact frequencies and their harmonics beyond the Nyquist rate in real signals, as well as signals with multiple frequencies.
