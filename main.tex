@@ -8,7 +8,9 @@
 \usepackage{lipsum}
 \usepackage{titlesec}
 \usepackage{microtype}
+\usepackage{booktabs}
 \usepackage{appendix}
+\usepackage[draft]{changes}
 \usepackage[all]{nowidow}
 \usepackage{bm}
 \renewcommand{\vec}[1]{\text{\bfseries #1}}
@@ -19,8 +21,12 @@
 \emergencystretch=0pt
 \righthyphenmin=4
 \lefthyphenmin=4
-%\widowpenalty10000
-%\clubpenalty10000
+\widowpenalty10000
+\clubpenalty10000
+\makeatletter
+\@namedef{Changes@AuthorColor}{red}
+\colorlet{Changes@Color}{red}
+\makeatother
 \renewcommand*\thesection{\arabic{chapter}.\arabic{section}}
 
 \def\email#1{\gdef\@email{#1}}\email{}
@@ -68,6 +74,8 @@
 
 \cleardoublepage
 \pagenumbering{arabic}
+
+\listofchanges
 
 \include{chapter01}
 \include{chapter02}
