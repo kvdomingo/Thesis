@@ -6,11 +6,13 @@
 \usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{lipsum}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{titlesec}
 \usepackage{microtype}
 \usepackage{booktabs}
 \usepackage{appendix}
-\usepackage[draft]{changes}
+\usepackage[final]{changes}
 \usepackage[all]{nowidow}
 \usepackage{bm}
 \renewcommand{\vec}[1]{\text{\bfseries #1}}
@@ -31,6 +33,8 @@
 
 \def\email#1{\gdef\@email{#1}}\email{}
 
+%\usepackage{lineno}
+%\linenumbers
 
 \begin{document}
 \pagenumbering{roman}
@@ -58,15 +62,14 @@
 	\rm\uppercase\expandafter{Bachelor of Science}
 	\rm\uppercase{in}
 	\rm\uppercase\expandafter{Applied Physics}\\
-	\textsc\expandafter{April 2020}
+	\textsc\expandafter{June 2020}
 }
 
 \maketitle
 \thispagestyle{titlestyle}
 
-\chapter*{Acknowledgments}
-
-\chapter*{Abstract}
+\include{acknowledgments}
+\include{abstract}
 
 \tableofcontents
 \listoffigures
@@ -84,10 +87,10 @@
 \include{chapter05}
 \include{chapter06}
 
-\appendix
-\include{appendix}
-
 \bibliographystyle{spp-bst}
 \bibliography{library,thesis}
+
+\appendix
+\include{appendix}
 
 \end{document}

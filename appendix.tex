@@ -1,2 +1,98 @@
 \chapter{Codes and Implementations}
 \label{appendix:codes}
+
+\singlespacing
+\lstset{
+	basicstyle=\footnotesize\ttfamily,
+	commentstyle=\itshape\color{green!50!black},
+	keywordstyle=\bfseries\color{Purple},
+	stringstyle=\color{red!70!black},
+	numberstyle=\footnotesize\ttfamily,
+	numbersep=15pt,
+	tabsize=4,
+	frame=lines,
+	language=Python,
+	numbers=left,
+	label={code:1d-test},
+	caption={Code for compressive sensing of 1D test sinusoids.}
+}
+\lstset{morekeywords={as, True, False}}
+\begin{lstlisting}
+import numpy as np
+import numpy.random as rand
+import scipy.fftpack as fft
+
+# load recording
+signal = np.loadtxt("piano.txt").astype("float32")
+
+# define parameters
+samprate = 44.1e3
+duration = 1/8
+N = int(duration*samprate)
+M = 300
+t = np.linspace(0, duration, N)
+
+# extract short portion of recording
+sig_start = 40000
+x = signal[sig_start:sig_start + N]
+
+# simulate compressive measurements
+yi = rand.randint(0, N, M)
+yi = np.sort(yi)
+y = x[yi]
+
+# L1 optimization using CVX ECOS
+import cvxpy as cvx
+xhat_cvx = cvx.Variable(N)
+objective = cvx.Minimize(cvx.Norm(xhat_cvx, 1))
+constraints = [A*xhat_cvx == y]
+prob = cvx.Problem(objective, constraints)
+result = prob.solve(verbose=True, solver="ECOS")
+x_cvx = np.array(xhat_cvx.value)
+x_cvx = np.squeeze(x_cvx)
+x_cvx = fft.dct(x_cvx, norm="ortho", axis=0)
+
+# L1-regularized L2 optimization using LASSO
+from sklearn.linear_model import Lasso, LassoCV
+lasso = LassoCV(cv=10, random_state=0, verbose=True, n_jobs=-1)
+lasso.fit(A, y)
+x_lasso = fft.idct(lasso.coef_)
+\end{lstlisting}
+
+\lstset{
+	label={code:random},
+	caption={Code for generating different random distributions.}
+}
+\begin{lstlisting}
+from sklearn.metrics import mean_squared_error
+# define parameters
+samprate = 44.1e3
+duration = 1/32
+N = int(duration*samprate)
+M = np.arange(50, N+1, 50)
+t = np.linspace(0, duration, N)
+
+# define normalization function
+def normalize(x):
+	x = x.astype(float)
+	x /= x.max()
+	return x
+
+# evaluate errors
+y_uniform_errs = []
+for m in M:
+	trial_err = []
+	for i in range(10):
+		yi = rand.uniform(0, N, m)
+		yi = np.sort(yi)
+		y_uniform = signal[yi]
+		d = np.identity(N)
+		d = fft.dct(d)
+		A = d[yi]
+		lasso = Lasso(alpha=0.1)
+		lasso.fit(A, y_uniform)
+		xhat_uniform = fft.idct(lasso.coef_)
+		mse = mean_squared_error(normalize(signal), normalize(xhat_uniform))
+		trial_err.append(mse)
+	y_uniform_errs.append(trial_err)
+\end{lstlisting}

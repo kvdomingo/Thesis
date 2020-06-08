@@ -19,5 +19,6 @@ build/
 # Misc
 *.docx
 rev/
+poster/
 NIPthesis/
 *.psd

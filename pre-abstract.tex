@@ -1,0 +1,71 @@
+\documentclass[11pt,oneside]{article}
+\usepackage[a4paper,top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{setspace}\singlespacing
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\fancyhead[l]{DOMINGO, Kenneth V. \\ BS Applied Physics (Instrumentation)}
+\pagenumbering{gobble}
+\pagestyle{fancy}
+\parindent 0pt
+\parskip=0.25em
+\pretolerance=5000
+\tolerance=9000
+\emergencystretch=0pt
+\righthyphenmin=4
+\lefthyphenmin=4
+\newlength\Colsep
+\setlength\Colsep{10pt}
+
+\begin{document}
+
+\paragraph{Tentative Thesis Title:}
+Compressive Sensing: Applications from 1-D to $N$-D
+
+\paragraph{PACS:}
+43.60.+d (Acoustic signal processing), 07.05.Pj (Image processing algorithms), 07.05.Mh (Neural networks in computers)
+
+\paragraph{Problem Statement:}
+I present a generalization of compressive sensing to signals of arbitrary dimensions for applications such as compression, encryption, and enhancement.
+
+\paragraph{Significance:}
+Modern signal acquisition technologies are made possible by the Nyquist-Shannon sampling theorem (NST) However, this paradigm is extremely wasteful as the signal is compressed before storing it by systematically discarding the imperceptible information. Compressive sensing (CS) aims to directly sense the information that survives the compression stage. Current literature focus exclusively on either audio or image signals, as well as quantifying their reconstruction quality with ambiguous metrics. This study aims to be able to process signals of arbitrary dimensions such as those consisting of combinations of audio and images, as well as quantify the reconstruction quality using metrics that are quantitative and are perceptually intuitive.
+
+\paragraph{Methodology}:\medskip \\
+\begin{minipage}{\textwidth}
+	\begin{minipage}[c][][c]{\dimexpr0.5\textwidth-0.5\Colsep\relax}
+		\begin{enumerate}
+			\item \textbf{Images}: Acquire image samples following uniform random distribution.
+			\item Construct a sensing matrix by taking random columns of an orthonormal basis corresponding to each sample.
+			\item Perform optimization to minimize the desired objective using a desired algorithm.
+			\item Quantify reconstruction using a perceptually-accurate metric.
+		\end{enumerate}
+	\end{minipage}\hfill
+	\begin{minipage}[c][][c]{\dimexpr0.5\textwidth-0.5\Colsep\relax}
+		\begin{enumerate}
+			\item \textbf{Audio}: Obtain audio sample. Divide it into fixed-time windows with overlap and multiply each by a window function.
+			\item Follow the latter steps in the image methodology.
+			\item After optimization, reconstruct image by constant-overlap-add method.
+			\item $N$-dim signals can be decomposed and processed as either of these two emergent methods.
+		\end{enumerate}		
+	\end{minipage}
+\end{minipage}
+
+\paragraph{Major References}
+\begin{enumerate}[label={[\arabic*]}]
+	\item E. J. Cand\`{e}s, J. K. Romberg, and T. Tao, Stable signal recovery from incomplete and inaccurate measurements, \textit{Commun. Pure Appl. Math.} \textbf{59}, 1207 (2006), arXiv:0503066v2.
+	\item S. Y. Low, D. S. Pham, and S. Venkatesh, Compressive speech enhancement, \textit{Speech Commun.} \textbf{55}, 757 (2013).
+	\item Y. Mo, A. Zhang, F. Zheng, and N. Zhou. An image compression-encryption algorithm based on 2-D compressive sensing. \textit{J. Comput. Inf. Syst.} \textbf{9}(24), 10057 (2013).
+\end{enumerate}
+
+\bigskip
+
+Submitted by: \\
+\smallskip \\
+\textbf{Kenneth V. Domingo} \\
+
+Endorsed by: \\
+\smallskip \\
+\textbf{Maricor N. Soriano} \\
+Thesis Adviser
+
+\end{document}
