@@ -4,7 +4,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{subcaption}
-\usepackage{graphicx}
+\usepackage{lineno}
 \usepackage{lipsum}
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
@@ -12,11 +12,11 @@
 \usepackage{microtype}
 \usepackage{booktabs}
 \usepackage{appendix}
-\usepackage[final]{changes}
 \usepackage[all]{nowidow}
-\usepackage{bm}
-\renewcommand{\vec}[1]{\text{\bfseries #1}}
+
+\usepackage{graphicx}
 \graphicspath{{images/}}
+
 \input{spp.dat}
 \pretolerance=5000
 \tolerance=9000
@@ -25,16 +25,18 @@
 \lefthyphenmin=4
 \widowpenalty10000
 \clubpenalty10000
+
+\usepackage{bm}
+\renewcommand{\vec}[1]{\text{\bfseries #1}}
+
+\usepackage[draft, xcolor={dvips, Green}]{changes}
 \makeatletter
-\@namedef{Changes@AuthorColor}{red}
-\colorlet{Changes@Color}{red}
+\@namedef{Changes@AuthorColor}{Green}
+\colorlet{Changes@Color}{Green}
 \makeatother
+
 \renewcommand*\thesection{\arabic{chapter}.\arabic{section}}
-
 \def\email#1{\gdef\@email{#1}}\email{}
-
-%\usepackage{lineno}
-%\linenumbers
 
 \begin{document}
 \pagenumbering{roman}
