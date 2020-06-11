@@ -171,7 +171,7 @@ Correlation is a statistical measure of obtaining useful information from a give
 
 \begin{equation}
 	\label{eq:correlation-coeff}
-	C = \frac{\sum_{i=1}^N (x_i - \ev{\vec{x}}) (y_i - \ev{\vec{y}}}{\sqrt{\sum_{i=1}^N (x_i - \ev{\vec{x}})^2 \sum_{i=1}^N (y_i - \ev{\vec{y}})^2}}
+	C = \frac{\sum_{i=1}^N (x_i - \ev{\vec{x}}) (y_i - \ev{\vec{y}})}{\sqrt{\sum_{i=1}^N (x_i - \ev{\vec{x}})^2 \sum_{i=1}^N (y_i - \ev{\vec{y}})^2}}
 \end{equation}
 
 \noindent where $\vec{x}$ and $\vec{y}$ are the original and encrypted signals, respectively. For the purposes of encryption, a correlation coefficient closer to 0 is better. Table~\ref{tab:correlation} shows the computed correlations for the original and encrypted Lena images in the horizontal, vertical, and diagonal directions. The correlation of the encrypted signal is much lower than that of the original, which means that a potential attacker cannot gain any useful information by employing statistical analyses.

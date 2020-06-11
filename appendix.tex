@@ -1,11 +1,13 @@
 \chapter{Codes and Implementations}
 \label{appendix:codes}
 
+Listed in this section are the core codes used in the study. Complete source codes are available at my private GitHub repository. Access can be requested via email at \url{kvdomingo@up.edu.ph}.
+
 \singlespacing
 \lstset{
 	basicstyle=\footnotesize\ttfamily,
 	commentstyle=\itshape\color{green!50!black},
-	keywordstyle=\bfseries\color{Purple},
+	keywordstyle=\bfseries\color{blue},
 	stringstyle=\color{red!70!black},
 	numberstyle=\footnotesize\ttfamily,
 	numbersep=15pt,
@@ -13,10 +15,14 @@
 	frame=lines,
 	language=Python,
 	numbers=left,
+}
+\lstset{morekeywords={as, True, False}}
+
+
+\lstset{
 	label={code:1d-test},
 	caption={Code for compressive sensing of 1D test sinusoids.}
 }
-\lstset{morekeywords={as, True, False}}
 \begin{lstlisting}
 import numpy as np
 import numpy.random as rand
@@ -59,40 +65,405 @@ lasso.fit(A, y)
 x_lasso = fft.idct(lasso.coef_)
 \end{lstlisting}
 
+
 \lstset{
-	label={code:random},
-	caption={Code for generating different random distributions.}
+	label={code:sl0},
+	caption={Code for implementation of GPU-accelerated SL0, translated from original MATLAB version.}
 }
 \begin{lstlisting}
-from sklearn.metrics import mean_squared_error
-# define parameters
-samprate = 44.1e3
-duration = 1/32
-N = int(duration*samprate)
-M = np.arange(50, N+1, 50)
-t = np.linspace(0, duration, N)
+import numpy as np
+import numpy.random as rand
+import tensorflow as tf
+import scipy.fftpack as fft
 
-# define normalization function
-def normalize(x):
-	x = x.astype(float)
-	x /= x.max()
-	return x
+# define L0 norm estimator function
+def Fsigma(x_i, sigma):
+	x = tf.abs(x_i)
+	return x_i * tf.exp(-x**2/(2*sigma**2))
 
-# evaluate errors
-y_uniform_errs = []
-for m in M:
-	trial_err = []
-	for i in range(10):
-		yi = rand.uniform(0, N, m)
-		yi = np.sort(yi)
-		y_uniform = signal[yi]
-		d = np.identity(N)
-		d = fft.dct(d)
-		A = d[yi]
-		lasso = Lasso(alpha=0.1)
-		lasso.fit(A, y_uniform)
-		xhat_uniform = fft.idct(lasso.coef_)
-		mse = mean_squared_error(normalize(signal), normalize(xhat_uniform))
-		trial_err.append(mse)
-	y_uniform_errs.append(trial_err)
+def SL0(A, b, Fsigma=Fsigma, sigma_min=1e-12, mu_0=2, L=3, sdf=0.5):
+	A = tf.convert_to_tensor(A, dtype=tf.float32)
+	b = tf.convert_to_tensor(b, dtype=tf.float32)
+	A_plus = tf.linalg.pinv(A)
+	x = tf.linalg.matmul(A_plus, b)
+	sigma = 2 * np.max(np.abs(x.numpy()))
+	while sigma > sigma_min:
+		for i in range(L):
+			delta = Fsigma(x, sigma)
+			x -= mu_0 * delta
+			x -= tf.linalg.matmul(A_plus, tf.linalg.matmul(A, x) - b)
+		sigma *= sdf
+	return x.numpy()
+\end{lstlisting}
+
+
+\lstset{
+	label={code:sl0-encrypt},
+	caption={Simultaneous compression-encryption with SL0.}
+}
+\begin{lstlisting}
+import numpy as np
+import numpy.random as rand
+import scipy.fftpack as fft
+import cv2 as cv
+
+def encrypt(filename, compression, key1, key2, key3):
+	if isinstance(filename, str):
+		X = cv.imread(filename, 0)
+	if isinstance(filename, np.ndarray):
+		X = filename.copy()
+	N = len(X)
+	M = int(compression * N)
+	
+	lamda1 = [key1]
+	lamda2 = [key2]
+	for i in range(1, 2*N):
+		lamda1.append(key3*lamda1[i-1]*(1 - lamda1[i-1]))
+		lamda2.append(key3*lamda2[i-1]*(1 - lamda2[i-1]))
+
+	s1 = np.array(lamda1[N:])
+	s2 = np.array(lamda2[N:])
+	n = np.arange(N)
+	sorty1 = np.array([s1, n]).T
+	sorty2 = np.array([s2, n]).T
+	sorty1 = sorty1[sorty1[:, 0].argsort()]
+	sorty2 = sorty2[sorty2[:, 0].argsort()]
+	l1 = sorty1.T[1].astype(np.uint8)
+	l2 = sorty2.T[1].astype(np.uint8)
+	
+	H = np.linalg.hadamard(2**(np.round(np.log2(N)).astype(int)))
+	Phi1 = H[l1[:M], :N]
+	Phi2 = H[l2[:M], :N]
+	
+	Psi = fft.dct(np.identity(N))
+	beta1 = Phi1.dot(Psi.T.dot(X))
+	beta = Psi.T.dot(X.T.dot(Psi))
+	beta2 = Psi.T.dot(beta1.T)
+	Y = Phi2.dot(beta.dot(Phi1.T))
+	return (Y, compression)
+	
+def decrypt(signal_in, decompress, key1, key2, key3):
+	M = len(signal_in)
+	N = int(M/decompress)
+	lamda1 = [key1]
+	lamda2 = [key2]
+	for i in range(1, 2*N):
+		lamda1.append(key3*lamda1[i-1]*(1 - lamda1[i-1]))
+		lamda2.append(key3*lamda2[i-1]*(1 - lamda2[i-1]))
+		
+	s1 = np.array(lamda1[N:])
+	s2 = np.array(lamda2[N:])
+	n = np.arange(N)
+	sorty1 = np.array([s1, n]).T
+	sorty2 = np.array([s2, n]).T
+	sorty1 = sorty1[sorty1[:, 0].argsort()]
+	sorty2 = sorty2[sorty2[:, 0].argsort()]
+	l1 = sorty1.T[1].astype(np.uint8)
+	l2 = sorty2.T[1].astype(np.uint8)
+	
+	H = np.linalg.hadamard(2**(np.round(np.log2(N)).astype(int)))
+	Phi1 = H[l1[:M], :N]
+	Phi2 = H[l2[:M], :N]
+	
+	y1 = SL0(Phi2, signal_in)
+	y2 = SL0(Phi1, y1.T)
+	Y = idct2(ydir2)
+	return (Y, decompress)
+\end{lstlisting}
+
+
+\lstset{
+	label={code:1dcs},
+	caption={Code for reading from an audio file and performing CS.}
+}
+\begin{lstlisting}
+import numpy as np
+import numpy.random as rand
+import scipy.fftpack as fft
+import scipy.io.wavfile as wav
+import IPython.display as disp
+
+class compsenseFromFile:
+	def __init__(self, filename, downsample=False, downrate=None):
+		self.rate, self.data = wav.read(filename)
+		self.filename = filename
+		self.name = filename[:-4]
+		if len(self.data.shape) > 1 and self.data.shape[1] > 1:
+			self.data = self.data.mean(axis=1)
+		self.N = len(self.data)
+		self.dur = self.N/self.rate
+		self.t = np.linspace(0, self.dur, self.N)
+		self.coef = fft.fft(self.data)
+		self.coefshift = fft.fftshift(self.coef)
+		if downsample:
+			self.downrate = downrate
+			self.Nd = int(downrate * self.dur)
+			nd = np.round(np.linspace(0, self.N-1, self.Nd)).astype(int)
+			self.data = self.data[nd]
+			self.t = self.t[nd]
+			self.coef = fft.fft(self.data)
+			self.coefshift = fft.fftshift(self.coef)
+			self.rate = downrate
+		else:
+			self.Nd = self.N
+			self.t = np.linspace(0, self.dur, self.Nd)
+			
+	def getDominantFrequency(coef, rate):
+		return np.argmax(abs(coef))/len(coef)*rate
+	
+	def displayOriginal(self, save=False):
+		fig = mp.figure(figsize=(5*16/9*2, 5))
+	
+		ax = fig.add_subplot(121)
+		ax.plot(self.t, self.data, lw=0.4)
+		ax.set_xlabel("time, s")
+		ax.set_ylabel("amplitude")
+		ax.set_title("original signal, $f_s = %i$Sa/s"%(self.rate))
+		
+		f = np.linspace(0, self.rate, self.Nd)
+		ax = fig.add_subplot(122)
+		ax.plot(f[:self.Nd//2], abs(self.coef)[:self.Nd//2])
+		ax.set_xlabel("frequency, Hz")
+		ax.set_ylabel("density")
+		ax.set_title("Frequency spectrum")
+		
+		if save:
+			mp.savefig(self.name + "_original.png", dpi=300, bbox_inches="tight")
+		
+		mp.show()
+		disp.Audio(self.data, rate=self.rate)
+	
+	def sampleCompressive(self, mode, rate):
+		self.subrate = rate
+		self.M = int(self.subrate*self.dur)
+	
+		if mode == "random":
+			m = np.sort(rd.randint(0, self.Nd, self.M))
+			elif mode == "subnyquist":
+			m = np.round(np.linspace(0, self.Nd-1, self.M)).astype(int)
+		else:
+			raise ValueError("Specified mode is invalid")
+		
+		self.y = self.data[m]
+		self.tm = self.t[m]
+		self.compressedCoef = fft.fft(self.y)
+		self.compressedCoefShift = fft.fftshift(self.compressedCoef)
+		self.m = m
+	
+	def displayCompressed(self, save=False):
+		y = self.to_int16(self.y)
+	
+		fig = mp.figure(figsize=(5*16/9*2, 5))
+		
+		ax = fig.add_subplot(121)
+		ax.plot(self.tm, y, lw=0.4)
+		ax.set_xlabel("time, s")
+		ax.set_ylabel("amplitude")
+		ax.set_title("compressively sampled signal")
+		
+		f = np.linspace(0, self.subrate, self.M)
+		ax = fig.add_subplot(122)
+		ax.plot(f[:self.M//2], abs(self.compressedCoef)[:self.M//2])
+		ax.set_xlabel("frequency, Hz")
+		ax.set_ylabel("density")
+		ax.set_title("Frequency spectrum")
+		
+		if save:
+			mp.savefig(self.name + "_comp.png", dpi=300, bbox_inches="tight")
+			wav.write(self.name + "_comp.wav", self.subrate, y)
+		
+		mp.show()
+		disp.Audio(y, rate=self.subrate)
+	
+	def recovery(self, method, **method_kwargs):
+		self.method = method
+		d = fft.dct(np.identity(self.Nd))
+		A = d[self.m]
+		
+		if method == "lasso":
+			prob = skl.Lasso(**method_kwargs)
+		elif method == "lassocv":
+			prob = skl.LassoCV(**method_kwargs)
+		elif method == "omp":
+			prob = skl.OrthogonalMatchingPursuit(**method_kwargs)
+		elif method == "sl0":
+			prob = SL0(A, self.y)
+			self.recoveredCoef = prob
+			return
+		else:
+			raise ValueError("Specified method is invalid")
+		
+		prob.fit(A, self.y)
+		self.recoveredCoef = prob.coef_
+	
+	def displayRecovered(self, save):
+		xhat = fft.idct(self.recoveredCoef)
+		xhat = self.to_int16(xhat)
+		fig = mp.figure(figsize=(5*16/9*2, 5))
+		
+		ax = fig.add_subplot(121)
+		ax.plot(self.t, xhat, lw=0.4)
+		ax.set_xlabel("time, s")
+		ax.set_ylabel("amplitude")
+		ax.set_title("reconstructed signal")
+		
+		f = np.linspace(0, self.rate/2, self.Nd)
+		ax = fig.add_subplot(122)
+		ax.plot(f[:self.Nd//2], abs(self.recoveredCoef)[:self.Nd//2])
+		ax.set_xlabel("frequency, Hz")
+		ax.set_ylabel("density")
+		ax.set_title("Frequency spectrum")
+		
+		if save:
+			mp.savefig(self.name + "_recon_" + self.method + ".png", dpi=300, bbox_inches="tight")
+			wav.write(self.name + "_recon_" + self.method + ".wav", self.rate, xhat)
+		
+		mp.show()
+		disp.Audio(self.y, rate=self.rate)
+		self.xhat = xhat
+	
+	def to_int16(self, sig):
+		return np.round(sig/abs(sig).max() * ((2**16 - 1)//2)).astype("int16")
+	
+	def get_psnr(self):
+		return 20*np.log10((2**16/2 - 1)/np.sqrt(mse(self.data, self.xhat)))
+	
+	def run_all(self, mode, rate, save, method, **method_kwargs):
+		self.displayOriginal(save)
+		self.sampleCompressive(mode, rate)
+		self.displayCompressed(save)
+		self.recovery(method, **method_kwargs)
+		self.displayRecovered(save)
+\end{lstlisting}
+
+
+\lstset{
+	label={code:speech-cs},
+	caption={Code for parsing speech from multiple sources and performing CS.}
+}
+\begin{lstlisting}
+	class SpeechCS:
+		def __init__(self, filename, rate=None, downsample=False, downrate=None):
+			source_type = type(filename)
+			if source_type == str:
+				if filename.endswith(".wav"):
+					self.data, self.rate = sf.read(filename)
+				elif filename.endswith(".csv"):
+					self.data = np.genfromtxt(filename, delimiter=",")
+					if rate is not None:
+						self.rate = rate
+					else:
+						self.rate = int(input("Enter sample rate: "))
+				else:
+					return "Unsupported file type"
+			elif source_type == np.ndarray:
+				self.data = filename
+				if rate is not None:
+					self.rate = rate
+				else:
+					self.rate = int(input("Enter sample rate: "))
+			
+			self.dur = self.data.size/self.rate
+			self.name = filename[:-4]
+			self.filename = filename
+			
+			if len(self.data.shape) > 1 and self.data.shape[1] > 1:
+				self.data = self.data.mean(axis=1)
+			
+			if downsample:
+				self.rate = downrate
+				downsize = int(self.dur * downrate)
+				down_idx = np.round(np.linspace(0, self.data.size-1, downsize)).astype(int)
+				self.data = self.data[down_idx]
+			
+			self.t = np.linspace(0, self.dur, self.data.size)
+		
+		def displayData(self, seglen, pc_overlap, save=False, savename=None, **plot_kwargs):
+			fig = plt.figure(figsize=(5*16/9, 5*2))
+			
+			ax = fig.add_subplot(211)
+			ax.plot(self.t, self.data, lw=0.75, **plot_kwargs)
+			ax.set_ylabel("amplitude")
+			
+			ax = fig.add_subplot(212, sharex=ax)
+			f, tx, Zxx = sig.stft(self.data, self.rate, nperseg=seglen, noverlap=int(seglen*pc_overlap), window="hann", return_onesided=True)
+			powspecdens = np.zeros_like(Zxx, float)
+			powspecdens[0] = abs(Zxx[0])**2
+			for w in range(1, len(f)):
+				powspecdens[w] = (abs(Zxx[w])**2)
+			powspecdens = 10*np.log10(powspecdens)
+			ax.pcolormesh(tx, f, powspecdens, cmap="gray_r", shading="flat", zorder=0)
+			ax.set_ylim(f[1], f[-1])
+			ax.set_ylabel("frequency, Hz")
+			ax.set_xlabel("time, s")
+			
+			plt.tight_layout()
+			if save:
+				plt.savefig(savename, dpi=300, bbox_inches='tight')
+			plt.show()
+			disp.Audio(self.data, rate=self.rate)
+		
+		def sampleCompressive(self, comp_ratio, seglen, percent_overlap, window="hann"):
+			hop_size = int(seglen * percent_overlap)
+			starts = np.arange(0, self.data.size, seglen - hop_size, dtype=int)
+			starts = starts[starts + seglen < self.data.size]
+			w = sig.get_window(window, seglen + 1)[:-1]
+			comp_size = int(seglen * comp_ratio)
+			comp_rate = int(self.rate * comp_ratio)
+			xhat = np.zeros_like(self.data, complex)
+			wsum = np.zeros_like(xhat)
+			rand_idx = np.zeros((len(starts), comp_size), int)
+			for i in range(len(rand_idx)):
+				rand_idx[i] = rd.choice(seglen, size=comp_size, replace=False)
+			spars_basis = fft.dct(np.identity(seglen))
+			for i,n in enumerate(starts):
+				x = w * self.data[n : n + seglen]
+				y = x[rand_idx[i]]
+				A = spars_basis[rand_idx[i]]
+				
+				if i == 0:
+					prob = skl.LassoCV(cv=10, random_state=0, n_jobs=3)
+					prob.fit(A, y)
+					alpha = prob.alpha_
+				
+				prob = skl.Lasso(alpha=alpha)
+				with warnings.catch_warnings():
+					warnings.simplefilter("ignore")
+					prob.fit(A, y)
+				
+				xhat[n : n + seglen] += w * fft.idct(prob.coef_)
+				wsum[n : n + seglen] += w**2
+			
+			self.seglen = seglen
+			self.comp_ratio = comp_ratio
+			self.percent_overlap = percent_overlap
+			self.hop_size = hop_size
+			self.starts = starts
+			self.w = w
+			self.xhat = xhat
+		
+		def displayRecovered(self, seglen, pc_overlap, save=False, savename=None, **plot_kwargs):
+			fig = plt.figure(figsize=(5*16/9, 5*2))
+			
+			ax = fig.add_subplot(211)
+			ax.plot(self.t, self.xhat.real, lw=0.75, **plot_kwargs)
+			ax.set_ylabel("amplitude")
+			
+			ax = fig.add_subplot(212, sharex=ax)
+			f, tx, Zxx = sig.stft(self.xhat.real, self.rate, nperseg=seglen, noverlap=int(seglen*pc_overlap), window="hann", return_onesided=True)
+			powspecdens = np.zeros_like(Zxx, float)
+			powspecdens[0] = abs(Zxx[0])**2
+			for w in range(1, len(f)):
+				powspecdens[w] = (abs(Zxx[w])**2)
+			powspecdens = 10*np.log10(powspecdens)
+			ax.pcolormesh(tx, f, powspecdens, cmap="gray_r", shading="flat", zorder=0)
+			ax.set_ylim(f[1], f[-1])
+			ax.set_ylabel("frequency, Hz")
+			ax.set_xlabel("time, s")
+			
+			plt.tight_layout()
+			if save:
+				plt.savefig(savename, dpi=300, bbox_inches='tight')
+			plt.show()
+			disp.Audio(self.xhat.real, rate=self.rate)
 \end{lstlisting}

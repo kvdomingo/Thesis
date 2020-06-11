@@ -1,2 +1,7 @@
-\chapter{Conclusions}
+\chapter{Conclusions and recommendations}
 \label{chap:conc}
+
+
+In this study, I investigated the use of compressive sensing for various applications, and as a viable alternative sampling theorem. In the compressive sampling of signals, there are similar workflows that can be followed separately for image-based and audio-based signals. Both follow a common workflow in the encoding stage, but differ slightly in the decoding stage. Depending on the size of the signal, both types can be processed in one go, but more often than not, the signal has to be processed in several manageable slices. Image-based signals can be sliced into patches with no overlap, while audio-based signals can be divided into subbands with significant overlap in order to suppress reconstruction artifacts.
+
+Due to the sparsity and incoherence requirements of CS, the ideal starting point is by using partial DCT matrices encoded by randomly distributed samples. As for the random distribution, uniform distribution achieves the lowest reconstruction error, while triangular distribution achieves more consistent results throughout a wide range of compression ratios.
