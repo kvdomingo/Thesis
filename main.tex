@@ -10,6 +10,7 @@
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{titlesec}
+\usepackage[nottoc]{tocbibind}
 \usepackage{microtype}
 \usepackage{booktabs}
 \usepackage{appendix}
@@ -43,17 +44,19 @@
 \pagenumbering{roman}
 
 \title{
-	\Large\uppercase\expandafter{Compressive sensing: Applications from 1-D to N-D
+	\Large\uppercase\expandafter{
+		Compressive sensing: Applications from 1-D to N-D
 	}
 }
 
 \author{
 	\large\rm\expandafter{
-	Kenneth V. Domingo 
+		Kenneth V. Domingo 
 	}\\
-	\large\textit{\expandafter{
+	\large\itshape\expandafter{
 		kdomingo@nip.upd.edu.ph
-	}}\\
+	}\\
+	\vskip0.5in
 	\textsc{An Undergraduate Thesis Submitted to}\\
 	\textsc{National Institute of Physics}\\
 	\textsc{College of Science}\\
@@ -65,18 +68,21 @@
 	\rm\uppercase\expandafter{Bachelor of Science}
 	\rm\uppercase{in}
 	\rm\uppercase\expandafter{Applied Physics}\\
-	\textsc\expandafter{June 2020}
+	\rm\expandafter{June 2020}
 }
 
 \maketitle
 \thispagestyle{titlestyle}
 
 \include{acknowledgments}
-\include{abstract}
 
 \tableofcontents
-\listoffigures
 \listoftables
+\listoffigures
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Abstract}
+\include{abstract}
 
 \cleardoublepage
 \pagenumbering{arabic}
