@@ -15,6 +15,16 @@ venv.bak/
 build/
 *.synctex.gz
 *.log
+*.aux
+*.pdf
+*.bbl
+*.blg
+*.loc
+*.lof
+*.soc
+*.lot
+*.out
+*.toc
 
 # Misc
 *.docx
