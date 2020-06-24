@@ -1,113 +1,100 @@
-\documentclass[12pt,oneside]{report}
-\usepackage{setspace}\doublespacing
-\usepackage{physics}
+%% 
+%% main.tex
+%% Formatted NIP thesis conformed with the CS guidelines for the MS
+%% Thesis and PhD Dissertation accepted for year 2005 onwards.
+%% See nip.sty for possible modifications.
+%%
+%% Copyright (C) 2006  Johnrob Y. Bantang: johnrob.bantang@gmail.com
+%%
+%% This tex is free; you can redistribute it and/or modify it under
+%% the terms of the GU General Public License as published by the
+%% Free Software Foundation version 2. See gpl.txt.
+%%
+%% This tex files are distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%% General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public License
+%% along with this program; if not, write to the Free Software
+%% Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+%% 02110-1301, USA.
+%%
+%%
+%%
+
+
+\documentclass[bs]{nip3} %%use nip class
+%% to add options: phd, ms, bs, applied
+\usepackage[a4paper, top=1in, left=1.5in, bottom=1.5in, right=1in]{geometry}
+%%packages to be used.
+\usepackage[square,numbers,sort&compress]{natbib}
+   %% square-bracketed, numbered, sorted, and compressed citations
+   %% for more info: http://merkel.zoneo.net/Latex/natbib.php
+\usepackage{verbatim} %% for \verbatiminput
+\usepackage[centertags]{amsmath}
+\usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{subcaption}
+\usepackage{newlfont}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+%\usepackage{subfigure}
 \usepackage{hyperref}
-\usepackage{lineno}
-\usepackage{lipsum}
+\usepackage{physics}
 \usepackage{listings}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{titlesec}
-\usepackage[nottoc]{tocbibind}
-\usepackage{microtype}
 \usepackage{multirow}
 \usepackage{booktabs}
-\usepackage{appendix}
-\usepackage[all]{nowidow}
+\usepackage[dvipsnames]{xcolor}
 
-\usepackage{graphicx}
+\usepackage{graphicx} %% for the graphics environment
 \graphicspath{{images/}}
-
-\input{spp.dat}
-\pretolerance=5000
-\tolerance=9000
-\emergencystretch=0pt
-\righthyphenmin=4
-\lefthyphenmin=4
-\widowpenalty10000
-\clubpenalty10000
 
 \usepackage{bm}
 \renewcommand{\vec}[1]{\text{\bfseries #1}}
 
-\usepackage[final, xcolor={dvips, Green}]{changes}
-\makeatletter
-\@namedef{Changes@AuthorColor}{Green}
-\colorlet{Changes@Color}{Green}
-\makeatother
+%% Header section
+\title{Compressive sensing: Applications from 1-D to N-D} %%required
+\author{Kenneth V. Domingo} %% required
+\email{kdomingo@nip.upd.edu.ph}%% appears only when  version use \draft option.
+\adviser{Maricor N. Soriano}{Ph.D.}%% required
+\reader{First I. Reader}{Ph.D.}%% required
+\secondReader{No A. Co-Adviser}{Ph.D.}%% optional if with coadviser
+%\coadviser{Another A. Adviser}{Ph.D.}%% replace "\coadviser" with "\secondReader" if no co-adviser
+\director{Wilson O. Garcia}{Ph.D.}%% required
+\dean{Giovanni A. Tapang}{Ph.D.} %%required
+\gradyear{2020} \gradmonth{June} %%graduation month and year
+\defenseDate{xx May 2019}
+\degreelevel{Bachelor of Science}
+\course{Applied Physics}
 
-\renewcommand*\thesection{\arabic{chapter}.\arabic{section}}
-\def\email#1{\gdef\@email{#1}}\email{}
+%% Preliminary pages' contents input here..
+%\dedication{ \input{dedication.tex} }%% optional, see dedication.tex for sample content.
+\acknowledgments{ \input{acknowledgments.tex} } %% optional, see acknowledgment.tex for sample content.
+\abstract{ \input{0abstract.tex} } %% see abstract.tex
+\pacs{43.60.+d (Acoustic signal processing), 07.05.Pj (Image processing algorithms), 07.05.Mh (Neural networks in computers)}
 
+%% Main document section
 \begin{document}
-\pagenumbering{roman}
+\maketitle %% creates title page, do not remove this line.
+\makePrelim %% creates preliminary pages, do not remove this line.
 
-\title{
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.33\textwidth]{updlogo.png}
-	\end{figure}
-	\Large\uppercase{
-		Compressive sensing: Applications from 1-D to N-D
-	}
-}
-
-\author{
-	\large\rm\expandafter{
-		Kenneth V. Domingo 
-	}\\
-	\large\itshape\expandafter{
-		kdomingo@nip.upd.edu.ph
-	}\\
-	\vskip0.5in
-	\textsc{An Undergraduate Thesis Submitted to}\\
-	\textsc{National Institute of Physics}\\
-	\textsc{College of Science}\\
-	\textsc{University of the Philippines} \\
-	\textsc{Diliman, Quezon City}\\
-	\vskip0.25in
-	\rm In Partial Fulfillment of the Requirements\\
-	\rm for the Degree of\\
-	\rm\uppercase\expandafter{Bachelor of Science}
-	\rm\uppercase{in}
-	\rm\uppercase\expandafter{Applied Physics}\\
-	\rm\expandafter{June 2020}
-}
-
-\maketitle
-\thispagestyle{titlestyle}
-
-%\singlespacing
-%\include{signature}
-
-\doublespacing
-%\include{acknowledgments}
-
-\tableofcontents
-\listoftables
-\listoffigures
-
-\cleardoublepage
-\addcontentsline{toc}{chapter}{Abstract}
-\include{abstract}
-
-\cleardoublepage
-\pagenumbering{arabic}
-
-
-\include{chapter01}
-\include{chapter02}
-\include{chapter03}
-\include{chapter04}
-\include{chapter05}
-\include{chapter06}
-
-\bibliographystyle{spp-bst}
-\bibliography{library,thesis}
+\input{1introduction.tex}
+\input{2preliminaries.tex}
+\input{3randomcs.tex} %%could be model or experiment set-up
+\input{4imagecs.tex} %%could be results and discussions
+\input{5audiocs.tex}
+\input{6conclusions.tex}
+%% you may add more chapters by including more files just as above.
+%% see the files for patterns of the format used.
 
 \appendix
-\include{appendix}
+\input{appendix.tex}
+
+\bibliographystyle{plain}
+\bibliography{library,thesis} %% see file: "biblio.bib"
 
 \end{document}
+%%end of main.tex

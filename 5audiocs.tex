@@ -1,3 +1,4 @@
+% !TEX root =  main.tex
 \chapter{Audio compressive sensing}
 \label{chap:audio-cs}
 In this chapter, I apply CS to audio signals. These type of signals act as the bridge to $N$-dimensional CS as they are one-dimensional when represented in the time domain, but are projected to higher dimensions when represented in another domain, such as the spectrogram/modulation domain. Unlike images, audio signals are more challenging to compressively sample. Due to their relatively higher information density, the effects of undersampling are easily observed.
@@ -11,8 +12,8 @@ The compressed signal is shown in Fig.~\ref{fig:guitar-compressed}, which was co
 Following a similar process shown in Chapter \ref{chap:random-cs}, I chose DCT to be the sparse representation domain, and LASSO as the optimization algorithm. The reconstructed signal is shown in Fig.~\ref{fig:guitar-recovered}.For this case, I am concerned only with the frequency components that are recovered, and not so much with the magnitude. Thus, the reconstruction quality can be quantified using the cosine similarity
 
 \begin{equation}
-	\label{eq:cossim}
-	\mathrm{similarity} = \cos\theta = \frac{\vec{x} \cdot \bm\hat{\vec{x}}}{\norm{\vec{x}}_2 \norm{\bm\hat{\vec{x}}}_2}
+\label{eq:cossim}
+\mathrm{similarity} = \cos\theta = \frac{\vec{x} \cdot \bm\hat{\vec{x}}}{\norm{\vec{x}}_2 \norm{\bm\hat{\vec{x}}}_2}
 \end{equation}
 
 \noindent which allows us to compare two signals' frequency content directly in the time domain. A cosine similarity value of 0.8 and above indicates acceptable quality; a value of 1.0 indicates perfect reconstruction.
@@ -47,8 +48,8 @@ Following a similar process shown in Chapter \ref{chap:random-cs}, I chose DCT t
 Following the same procedure as the previous section, my aim now is to compare the performance of three different reconstruction algorithms in terms of average runtime and reconstruction quality. The algorithms used are LASSO and OMP, which were described in Chapter~\ref{chap:theory}. Additionally, the Smoothed L$_0$ Norm (SL0) \cite{Mohimani2009} is used, which approximates the $\ell_0$ norm using a Gaussian of the form
 
 \begin{equation}
-	\label{eq:sl0}
-	\lim_{\sigma \rightarrow 0} x \exp\qty(-\frac{x^2}{2\sigma^2}).
+\label{eq:sl0}
+\lim_{\sigma \rightarrow 0} x \exp\qty(-\frac{x^2}{2\sigma^2}).
 \end{equation}
 
 While all algorithms have polynomial time complexity \cite{Efron2004,Sturm2012,Xiang2019}, OMP shows the worst scaling with respect to time; LASSO and SL0 show similar performance over time (Fig.~\ref{fig:guitar-runtime}). In terms of reconstruction quality (cosine similarity), LASSO is able to breach the 0.8 threshold at 30\% compression ratio, while SL0 achieves this at 50\% compression. On the other hand, OMP shows a nonlinear trend with a large error, which is indicative of unstable performance for low compression ratios (Fig.~\ref{fig:guitar-cossim}).
@@ -81,15 +82,15 @@ In order to show its practical merits, we will inevitably have to deal with incr
 In obtaining the spectrogram representation, first define a short length sampling window, typically only a few milliseconds in duration, as well as the overlap between adjacent frames. The latter is crucial in suppressing boundary artifacts as it ensures that some information from the current measurement is carried over to the next measurement. The signal is then divided into frames by sliding this window across the entire signal. Each frame is multiplied with a window function; in this case, I used the Hann window, defined as
 
 \begin{equation}
-	\label{eq:hann-window}
-	w[n] = \sin^2\qty(\frac{\pi n}{N})
+\label{eq:hann-window}
+w[n] = \sin^2\qty(\frac{\pi n}{N})
 \end{equation}
 
 \noindent where $N + 1$ is the length of the window, and $n: 0 \leq n \leq N$ is the frame index. Finally, each frame undergoes a Fourier transformation. The entire process is also called a short-time Fourier transform, and is summarized as
 
 \begin{equation}
-	\label{eq:stft}
-	X(\omega, p) = \sum_{p=0}^{P-1} x[p] w[p - kR] e^{-i\omega p}
+\label{eq:stft}
+X(\omega, p) = \sum_{p=0}^{P-1} x[p] w[p - kR] e^{-i\omega p}
 \end{equation}
 
 \noindent where $x[p]$ is the $p$th signal frame, $w[p - kR]$ is the window function with hop size $R$ and time index $k$, and $\omega$ is the angular frequency.
@@ -133,8 +134,8 @@ The reconstruction quality was quantified using the International Telecommunicat
 For a more quantitative test, I also used the average segmental signal-to-noise ratio (SNR\textsubscript{seg}) \cite{Loizou2013}, defined as
 
 \begin{equation}
-	\label{eq:snrseg}
-	\mathrm{SNR_{seg}} = \frac{10}{B} \sum_{b=0}^{B-1} \log_{10} \frac{\sum_{i = Nb}^{Nb + N - 1} x_i^2}{\sum_{i = Nb}^{Nb + N - 1} (x_i - \hat{x}_i)^2}
+\label{eq:snrseg}
+\mathrm{SNR_{seg}} = \frac{10}{B} \sum_{b=0}^{B-1} \log_{10} \frac{\sum_{i = Nb}^{Nb + N - 1} x_i^2}{\sum_{i = Nb}^{Nb + N - 1} (x_i - \hat{x}_i)^2}
 \end{equation}
 
 \noindent where $N$ is the frame length, $B$ is the number of frames, $x_i$ are the original signal samples, and $\hat{x}_i$ are the reconstructed signal samples.

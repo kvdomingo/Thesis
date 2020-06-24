@@ -1,3 +1,4 @@
+% !TEX root =  main.tex
 \chapter{Image compressive sensing}
 \label{chap:image-cs}
 
@@ -19,7 +20,7 @@ In the case of high-definition images (whose shortest side is at least 720 pixel
 As mentioned in Chapter~\ref{chap:theory}, the most commonly used sparse representation domain for images is the Fourier domain, referred to in some fields as $k$-space. In this space, signals are represented as a linear superposition of a finite number of sinusoidal patterns. In Fig.~\ref{fig:2dsin}, $64 \times 64$ pixel sinusoidal patterns are generated, corresponding to sine waves traveling horizontally, vertically, and diagonally, as well as an egg tray pattern. In each case, all frequency components are 4 Hz. Figure~\ref{fig:2dsin-masked} visualizes the compressed image when a random sample of 5\% is taken from the signal. The actual compressed signal that is seen by the reconstruction algorithm is a one-dimensional sequence containing only the information from the points being sampled. Orthogonal matching pursuit (OMP) was used for reconstruction, which is a greedy algorithm that finds the combination of basis vectors which best represents the signal (similar to matching pursuit), but in addition, the residual at each iteration is recomputed using an orthogonal projection on the set of previously selected basis vectors \cite{Mallat1993}. Its objective function is
 
 \begin{equation}\label{eq:omp}
-	\arg\min_{\vec{x}} \norm{\vec{y} - \bm\Phi \vec{x}}_2^2 \quad \textrm{subject to} \quad \norm{\vec{x}}_0 \leq \gamma
+\arg\min_{\vec{x}} \norm{\vec{y} - \bm\Phi \vec{x}}_2^2 \quad \textrm{subject to} \quad \norm{\vec{x}}_0 \leq \gamma
 \end{equation}
 
 \noindent where $\gamma$ is a hyperparameter which controls the maximum allowable number of non-zero coefficients. The \texttt{Scikit-learn} implementation sets this value to 10\% of the number of samples by default \cite{scikit-learn}. Evaluation of the mean-squared error (MSE) for the pure horizontal and pure vertical sine waves, as well as the egg tray pattern yields a value that is practically negligible ($\approx 10^{-31}$); the reconstruction is exact. On the other hand, the reconstructed diagonal sine wave yields an MSE of $10^{-3}$---still quite small, but mild distortion can be observed at the image boundaries. This is due to the fact that the information at hand is finite, and so is the window size which, in this case, is the same size as the signal itself.
@@ -65,8 +66,8 @@ For this image in particular, it was first resized to $1600 \times 976$ pixels s
 To quantify the reconstruction quality, the Structural Similarity Index (SSIM) \cite{Wang2004} was used. This is a perception-based model that takes into account perceptual factors such as luminance, contrast, and structure. SSIM is calculated on windows in the image, and is defined as
 
 \begin{equation}
-	\label{eq:ssim}
-	\mathrm{SSIM}(\vec{x}, \bm\hat{\vec{x}}) = \frac{(2\mu_{\vec{x}}\mu_{\bm\hat{\vec{x}}} + c_1) (2\sigma_{\vec{x} \bm\hat{\vec{x}}} + c_2)}{(\mu_{\vec{x}}^2 + \mu_{\bm\hat{\vec{x}}}^2 + c_1) (\sigma_{\vec{x}}^2 + \sigma_{\bm\hat{\vec{x}}}^2 + c_2)}
+\label{eq:ssim}
+\mathrm{SSIM}(\vec{x}, \bm\hat{\vec{x}}) = \frac{(2\mu_{\vec{x}}\mu_{\bm\hat{\vec{x}}} + c_1) (2\sigma_{\vec{x} \bm\hat{\vec{x}}} + c_2)}{(\mu_{\vec{x}}^2 + \mu_{\bm\hat{\vec{x}}}^2 + c_1) (\sigma_{\vec{x}}^2 + \sigma_{\bm\hat{\vec{x}}}^2 + c_2)}
 \end{equation}
 
 \noindent where $\vec{x}, \bm\hat{\vec{x}}$ are the original and reconstructed signals, respectively, $\mu_{\vec{x}}, \mu_{\bm\hat{\vec{x}}}$ are the image means, $\sigma_{\vec{x}}, \sigma_{\bm\hat{\vec{x}}}$ are the image standard deviations, $\sigma_{\vec{x} \bm\hat{\vec{x}}}$ is the covariance between $\vec{x}$ \& $\bm\hat{\vec{x}}$, and $c_1, c_2$ are constants to stabilize division with a small denominator. SSIM values of 0.8 and above are considered acceptable.
@@ -130,7 +131,7 @@ From this, the following information can be gleaned. First, reconstruction perfo
 Because of the way compressively sampled images are coded with the sensing matrix, the use of CS as an encryption algorithm arises naturally. Consider the logistic map
 
 \begin{equation}\label{eq:logistic-map}
-	x_{n+1} = r x_n \qty(1 - x_n)
+x_{n+1} = r x_n \qty(1 - x_n)
 \end{equation}
 
 \noindent which is often used as an archetypal example of deterministic chaotic behavior for values of $r \in [3.57, 4)$. In this regime, the sequences produced by varying the initial parameter $x_0$ rapidly diverge from each other. Thus, this can become an encryption system by treating the parameters $r$ and $x_0$ as an encryption key set, and \eqref{eq:logistic-map} as the hash function. One key set is then needed for each signal dimension. Thus, two key sets are needed for grayscale image applications (six, in the case of an RGB image and a unique key set for each color channel). 
@@ -145,9 +146,9 @@ The construction of the sensing matrix $\bm\Phi$ differs from the general workfl
 	\item Sort $\vec{p}$ according to ascending values of $\vec{s}$.
 	\item Generate the first sensing matrix $\bm\Phi_1$ by extracting and stacking rows of a Hadamard matrix $\vec{H}$ of order $N$ indexed by the first $m$ elements of $\vec{p}$, i.e.,
 	\begin{equation}\label{eq:construct-hadamard}
-		\bm\Phi_1 = \mqty[
-			\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_m}
-		]^\top
+	\bm\Phi_1 = \mqty[
+	\vec{H}_{p_1} & \vec{H}_{p_2} & \cdots & \vec{H}_{p_m}
+	]^\top
 	\end{equation}
 	\noindent where $\vec{H}_{p_i}$ denotes the $p_i$th row vector of $\vec{H}$.
 	\item Any other sensing matrices can be constructed in the same way.
@@ -170,8 +171,8 @@ Figure~\ref{fig:encryption} shows the application of this to the Lena test image
 Correlation is a statistical measure of obtaining useful information from a given signal by analyzing adjacent pixels. The correlation coefficients can be obtained by
 
 \begin{equation}
-	\label{eq:correlation-coeff}
-	C = \frac{\sum_{i=1}^N (x_i - \ev{\vec{x}}) (y_i - \ev{\vec{y}})}{\sqrt{\sum_{i=1}^N (x_i - \ev{\vec{x}})^2 \sum_{i=1}^N (y_i - \ev{\vec{y}})^2}}
+\label{eq:correlation-coeff}
+C = \frac{\sum_{i=1}^N (x_i - \ev{\vec{x}}) (y_i - \ev{\vec{y}})}{\sqrt{\sum_{i=1}^N (x_i - \ev{\vec{x}})^2 \sum_{i=1}^N (y_i - \ev{\vec{y}})^2}}
 \end{equation}
 
 \noindent where $\vec{x}$ and $\vec{y}$ are the original and encrypted signals, respectively. For the purposes of encryption, a correlation coefficient closer to 0 is better. Table~\ref{tab:correlation} shows the computed correlations for the original and encrypted Lena images in the horizontal, vertical, and diagonal directions. The correlation of the encrypted signal is much lower than that of the original, which means that a potential attacker cannot gain any useful information by employing statistical analyses.
@@ -182,11 +183,11 @@ Correlation is a statistical measure of obtaining useful information from a give
 	\label{tab:correlation}
 	\begin{tabular}{rrrr}
 		\toprule
-		 & horizontal & vertical & diagonal \\
-		 \midrule
-		 original & 0.94 & 0.97 & 0.91 \\
-		 encrypted & 0.42 & 0.02 & $-0.05$ \\
-		 \bottomrule
+		& horizontal & vertical & diagonal \\
+		\midrule
+		original & 0.94 & 0.97 & 0.91 \\
+		encrypted & 0.42 & 0.02 & $-0.05$ \\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
