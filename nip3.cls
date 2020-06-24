@@ -262,9 +262,9 @@
 			\hline
 		\end{tabular*}}
 	\end{figure}
-\vspace{8pt}
+\vspace{30pt}
  
-  \vspace{36pt}
+  \vspace{45pt}
 	\noindent This is to certify that this thesis entitled
 	\textbf{\expandafter{\@title}}, prepared and submitted by
 	\expandafter{\@author}, is hereby endorsed for acceptance in partial fulfillment of the requirements for
