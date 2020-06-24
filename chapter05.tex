@@ -1,6 +1,6 @@
 \chapter{Audio compressive sensing}
 \label{chap:audio-cs}
-In this chapter, I apply CS to audio signals. These type of signals act as the bridge to $N$-dimensional CS as they are one-dimensional when represented in the time domain, but are projected to higher dimensions when represented in another domain, such as the spectrogram/modulation domain. Unlike images, audio signals are a tad harder to compressively sample. Due to their relatively higher information density, the effects of undersampling are easily observed.
+In this chapter, I apply CS to audio signals. These type of signals act as the bridge to $N$-dimensional CS as they are one-dimensional when represented in the time domain, but are projected to higher dimensions when represented in another domain, such as the spectrogram/modulation domain. Unlike images, audio signals are more challenging to compressively sample. Due to their relatively higher information density, the effects of undersampling are easily observed.
 
 \section{Test case: Sinusoid redux}
 \label{sec:audio-sine}
@@ -48,7 +48,7 @@ Following the same procedure as the previous section, my aim now is to compare t
 
 \begin{equation}
 	\label{eq:sl0}
-	\lim_{\sigma \rightarrow 0} x \exp\qty(-\frac{x^2}{2\sigma^2})
+	\lim_{\sigma \rightarrow 0} x \exp\qty(-\frac{x^2}{2\sigma^2}).
 \end{equation}
 
 While all algorithms have polynomial time complexity \cite{Efron2004,Sturm2012,Xiang2019}, OMP shows the worst scaling with respect to time; LASSO and SL0 show similar performance over time (Fig.~\ref{fig:guitar-runtime}). In terms of reconstruction quality (cosine similarity), LASSO is able to breach the 0.8 threshold at 30\% compression ratio, while SL0 achieves this at 50\% compression. On the other hand, OMP shows a nonlinear trend with a large error, which is indicative of unstable performance for low compression ratios (Fig.~\ref{fig:guitar-cossim}).
@@ -67,7 +67,7 @@ While all algorithms have polynomial time complexity \cite{Efron2004,Sturm2012,X
 		\caption{Reconstruction quality}
 		\label{fig:guitar-cossim}
 	\end{subfigure}
-	\caption{Comparison of the performance of LASSO, OMP, and SL0.}
+	\caption{Evaluation of the performance of LASSO, OMP, and SL0 in reconstructing the guitar signal shown in Fig.~\ref{fig:guitar}, in terms of runtime (a) and cosine similarity (b).}
 	\label{fig:guitar-algorithms}
 \end{figure}
 
@@ -148,6 +148,6 @@ Using the same test signal, I generated the error space maps by compressively sa
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{speech_metrics.png}
-	\caption{PESQ and SNR$_\mathrm{seg}$ error space maps as a function of compression ratio and number of subbands.}
+	\caption{Evaluation of PESQ and SNR$_\mathrm{seg}$ error space maps as a function of compression ratio and number of subbands, using the same speech recording in Fig.~\ref{fig:speech}}
 	\label{fig:speech-error}
 \end{figure}

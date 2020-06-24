@@ -9,7 +9,7 @@ For the signals of interest, I use the Fourier domain as the sparse representati
 
 \begin{figure}[htb]
 	\includegraphics[width=\textwidth]{random_sampling.png}
-	\caption{Original test signal (blue) and random measurements (orange).}
+	\caption{Original synthesized C$_5$ piano note (blue) and random measurements (orange).}
 	\label{fig:random-sampling}
 \end{figure}
 
@@ -22,11 +22,11 @@ In Chapter \ref{chap:theory}, I discussed an overview of popular algorithms used
 	\mathrm{CVXPY}:& \quad \min_{\bm\hat{\vec{x}}} \norm{\bm\hat{\vec{x}}}_1 \quad \textrm{subject to} \quad \vec{A}\bm\hat{\vec{x}} = \vec{y} \label{eq:random-cvxpy-objective}
 \end{align}
 
-\noindent where $\bm\hat{\vec{x}}$ is the candidate solution, and the optimum value of $\alpha$ was automatically determined via 10-fold cross validation. A detailed implementation is shown in Appendix \ref{appendix:codes}. Figure~\ref{fig:random-compare-algorithms} shows a comparison of the original signal with the reconstructions from the two algorithms in the time and frequency domains. In the time domain, both algorithms appear to have been able to successfully reconstruct the signal, though the CVXPY recovery shows many artifacts. The LASSO algorithm yields a mean-squared error (MSE) of 0.002, while CVXPY yields an MSE of 0.074. In the frequency domain, however, many frequencies are erroneously being recovered by the LASSO method, and more so with the CVXPY method. Because LASSO's $\alpha$ is a hyperparameter, it will need additional tuning to yield a more optimal value.
+\noindent where $\bm\hat{\vec{x}}$ is the candidate solution, and the optimum value of $\alpha$ is automatically determined via 10-fold cross validation. A detailed implementation is shown in Appendix \ref{appendix:codes}. Figure~\ref{fig:random-compare-algorithms} shows a comparison of the original signal with the reconstructions from the two algorithms in the time and frequency domains. In the time domain, both algorithms appear to have been able to successfully reconstruct the signal, though the CVXPY recovery shows many artifacts. The LASSO algorithm yields a mean-squared error (MSE) of 0.002, while CVXPY yields an MSE of 0.074. In the frequency domain, however, many frequencies are erroneously being recovered by the LASSO method, and more so with the CVXPY method. Because LASSO's $\alpha$ is a hyperparameter, it will need additional tuning to yield a more optimal value.
 
 \begin{figure}[htb]
 	\includegraphics[width=\textwidth]{reconstruction_methods.png}
-	\caption{Original signal (leftmost), LASSO reconstruction (middle), and CVXPY reconstruction (rightmost). The top row shows the time domain representation, while the bottom row shows the frequency domain representation.}
+	\caption{Original signal (left column), LASSO reconstruction (middle column), and CVXPY reconstruction (right column). The top row shows the time domain representation, while the bottom row shows the frequency domain representation.}
 	\label{fig:random-compare-algorithms}
 \end{figure}
 

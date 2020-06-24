@@ -69,7 +69,7 @@ To quantify the reconstruction quality, the Structural Similarity Index (SSIM) \
 	\mathrm{SSIM}(\vec{x}, \bm\hat{\vec{x}}) = \frac{(2\mu_{\vec{x}}\mu_{\bm\hat{\vec{x}}} + c_1) (2\sigma_{\vec{x} \bm\hat{\vec{x}}} + c_2)}{(\mu_{\vec{x}}^2 + \mu_{\bm\hat{\vec{x}}}^2 + c_1) (\sigma_{\vec{x}}^2 + \sigma_{\bm\hat{\vec{x}}}^2 + c_2)}
 \end{equation}
 
-\noindent where $\vec{x}, \bm\hat{\vec{x}}$ are the original and reconstructed signals, respectively, $\mu$ are the image means, $\sigma$ are the image standard deviations, and $c$ are constants to stabilize division with a small denominator. SSIM values of 0.8 and above are considered acceptable.
+\noindent where $\vec{x}, \bm\hat{\vec{x}}$ are the original and reconstructed signals, respectively, $\mu_{\vec{x}}, \mu_{\bm\hat{\vec{x}}}$ are the image means, $\sigma_{\vec{x}}, \sigma_{\bm\hat{\vec{x}}}$ are the image standard deviations, $\sigma_{\vec{x} \bm\hat{\vec{x}}}$ is the covariance between $\vec{x}$ \& $\bm\hat{\vec{x}}$, and $c_1, c_2$ are constants to stabilize division with a small denominator. SSIM values of 0.8 and above are considered acceptable.
 
 After stitching all patches at the end, the reconstructed image is shown in Fig.~\ref{fig:relativity-recovered}. Evaluation of SSIM yields a value of 0.88, way above the acceptable threshold. Selected patches with the aforementioned dominant patterns are shown with their reconstructed counterparts in Fig.~\ref{fig:relativity-dominant-slices}, corresponding to patches dominated by horizontal sinusoids, vertical sinusoids, diagonal sinusoids, multiple sinusoids, and patches with no dominant pattern.
 
