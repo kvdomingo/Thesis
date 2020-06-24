@@ -12,6 +12,7 @@
 \usepackage{titlesec}
 \usepackage[nottoc]{tocbibind}
 \usepackage{microtype}
+\usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{appendix}
 \usepackage[all]{nowidow}
@@ -44,7 +45,11 @@
 \pagenumbering{roman}
 
 \title{
-	\Large\uppercase\expandafter{
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.33\textwidth]{updlogo.png}
+	\end{figure}
+	\Large\uppercase{
 		Compressive sensing: Applications from 1-D to N-D
 	}
 }
